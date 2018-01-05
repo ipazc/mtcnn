@@ -19,7 +19,6 @@ Currently it is only supported python3 onwards. It can be installed with pip:
 
     $ pip3 install mtcnn
 
-
 USAGE
 #####
 
@@ -54,6 +53,28 @@ The model is adapted from the Facenet's MTCNN implementation, merged in a single
 to the module's path. It can be overriden by injecting it into the MTCNN() constructor during instantiation.
 
 The model must be numpy-based containing the 3 main keys "pnet", "rnet" and "onet", having each of them the weights of each of the layers of the network.
+
+
+
+TROUBLESHOOTING
+###############
+
+Ensure that you are running the latest version of pip before trying to install this package.
+
+MTCNN depends heavily on OpenCV3.1. By default it is going to be installed through pip (package opencv-python).
+However, if you face any of the following errors when trying to import cv2 or mtcnn:
+
+.. code::
+    ImportError: libgthread-2.0.so.0: cannot open shared object file: No such file or directory
+    ImportError: libSM.so.6: cannot open shared object file: No such file or directory
+    ImportError: libXrender.so.1: cannot open shared object file: No such file or directory
+    ImportError: libXext.so.6: cannot open shared object file: No such file or directory
+
+
+You might need to install the dependencies manually even after installing the package successfully through pip:
+
+.. code:: bash
+    $ apt-get install libglib2.0-dev libsm-dev libxrender-dev libxext-dev
 
 
 REFERENCE
