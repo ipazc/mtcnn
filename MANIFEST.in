@@ -1,0 +1,3 @@
+include mtcnn/data/mtcnn_weights.npy
+include requirements.txt
+include AUTHORS
