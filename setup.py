@@ -27,12 +27,12 @@ import sys
 from setuptools import setup, setuptools
 from mtcnn import __version__
 
+
 __author__ = 'Iván de Paz Centeno'
 
 
-
 def readme():
-    with open('README.rst') as f:
+    with open('README.rst', encoding="UTF-8") as f:
         return f.read()
 
 
