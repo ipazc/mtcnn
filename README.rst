@@ -65,6 +65,7 @@ MTCNN depends heavily on OpenCV3.1. By default it is going to be installed throu
 However, if you face any of the following errors when trying to import cv2 or mtcnn:
 
 .. code::
+
     ImportError: libgthread-2.0.so.0: cannot open shared object file: No such file or directory
     ImportError: libSM.so.6: cannot open shared object file: No such file or directory
     ImportError: libXrender.so.1: cannot open shared object file: No such file or directory
@@ -74,6 +75,7 @@ However, if you face any of the following errors when trying to import cv2 or mt
 You might need to install the dependencies manually even after installing the package successfully through pip:
 
 .. code:: bash
+
     $ apt-get install libglib2.0-dev libsm-dev libxrender-dev libxext-dev
 
 
