@@ -24,4 +24,4 @@
 #SOFTWARE.
 
 __author__ = "Iván de Paz Centeno"
-__version__= "0.0.2"
+__version__= "0.0.3"

@@ -4,8 +4,8 @@ MTCNN
 .. image:: https://badge.fury.io/py/mtcnn.svg
     :target: https://badge.fury.io/py/mtcnn
 
-Implementation of the MTCNN face detector for TensorFlow. It is written from scratch, using as a reference the implementation of
-MTCNN from David Sandberg (`FaceNet's MTCNN <https://github.com/davidsandberg/facenet/tree/master/src/align>`_). It is based on the paper *Zhang et al. (2016)* [ZHANG2016]_.
+Implementation of the MTCNN face detector for TensorFlow in Python3.4+. It is written from scratch, using as a reference the implementation of
+MTCNN from David Sandberg (`FaceNet's MTCNN <https://github.com/davidsandberg/facenet/tree/master/src/align>`_) in Facenet. It is based on the paper *Zhang et al. (2016)* [ZHANG2016]_.
 
 .. image:: https://github.com/ipazc/mtcnn/raw/master/result.jpg
 
@@ -13,11 +13,27 @@ MTCNN from David Sandberg (`FaceNet's MTCNN <https://github.com/davidsandberg/fa
 INSTALLATION
 ############
 
-Currently it is only supported python3 onwards. It can be installed with pip:
+Currently it is only supported Python3.4 onwards. It can be installed through pip:
 
 .. code:: bash
 
     $ pip3 install mtcnn
+
+This implementation requires OpenCV>=3.2 and Tensorflow>=1.4.0 installed in the system, with bindings for Python3.
+
+They can be installed through pip (if pip version >= 9.0.1):
+
+.. code:: bash
+
+    $ pip3 install opencv-python\>=3.2 tensorflow\>=1.4.0
+
+or compiled directly from sources (`OpenCV3 <https://github.com/opencv/opencv/archive/3.4.0.zip>`_, `Tensorflow <https://www.tensorflow.org/install/install_sources>`_).
+
+Note that a tensorflow-gpu version can be used instead if a GPU device is available on the system, which will speedup the results. It can be installed with pip:
+
+.. code:: bash
+
+    $ pip3 install tensorflow-gpu\>=1.4.0
 
 USAGE
 #####
@@ -43,6 +59,38 @@ The detector returns a list of JSON objects. Each JSON object contains three mai
 
 A good example of usage can be found in the file "`example.py`_." located in the root of this repository.
 
+BENCHMARK
+=========
+
+The following tables shows the benchmark of this mtcnn implementation running on an `Intel i7-3612QM CPU @ 2.10GHz <https://www.cpubenchmark.net/cpu.php?cpu=Intel+Core+i7-3612QM+%40+2.10GHz>`_, with a **CPU-based** Tensorflow 1.4.1.
+
+ - Pictures containing a single frontal face:
+
++------------+--------------+---------------+-----+
+| Image size | Total pixels | Process time  | FPS |
++============+==============+===============+=====+
+| 460x259    | 119,140      | 0.118 seconds | 8.5 |
++------------+--------------+---------------+-----+
+| 561x561    | 314,721      | 0.227 seconds | 4.5 |
++------------+--------------+---------------+-----+
+| 667x1000   | 667,000      | 0.456 seconds | 2.2 |
++------------+--------------+---------------+-----+
+| 1920x1200  | 2,304,000    | 1.093 seconds | 0.9 |
++------------+--------------+---------------+-----+
+| 4799x3599  | 17,271,601   | 8.798 seconds | 0.1 |
++------------+--------------+---------------+-----+
+
+ - Pictures containing 10 frontal faces:
+
++------------+--------------+---------------+-----+
+| Image size | Total pixels | Process time  | FPS |
++============+==============+===============+=====+
+| 474x224    | 106,176      | 0.185 seconds | 5.4 |
++------------+--------------+---------------+-----+
+| 736x348    | 256,128      | 0.290 seconds | 3.4 |
++------------+--------------+---------------+-----+
+| 2100x994   | 2,087,400    | 1.286 seconds | 0.7 |
++------------+--------------+---------------+-----+
 
 MODEL
 #####
@@ -54,30 +102,7 @@ to the module's path. It can be overriden by injecting it into the MTCNN() const
 
 The model must be numpy-based containing the 3 main keys "pnet", "rnet" and "onet", having each of them the weights of each of the layers of the network.
 
-
-
-TROUBLESHOOTING
-###############
-
-Ensure that you are running the latest version of pip before trying to install this package.
-
-MTCNN depends heavily on OpenCV3.1. By default it is going to be installed through pip (package opencv-python).
-However, if you face any of the following errors when trying to import cv2 or mtcnn:
-
-.. code::
-
-    ImportError: libgthread-2.0.so.0: cannot open shared object file: No such file or directory
-    ImportError: libSM.so.6: cannot open shared object file: No such file or directory
-    ImportError: libXrender.so.1: cannot open shared object file: No such file or directory
-    ImportError: libXext.so.6: cannot open shared object file: No such file or directory
-
-
-You might need to install the dependencies manually even after installing the package successfully through pip:
-
-.. code:: bash
-
-    $ apt-get install libglib2.0-dev libsm-dev libxrender-dev libxext-dev
-
+For more reference about the network definition, take a close look at the paper from *Zhang et al. (2016)* [ZHANG2016]_.
 
 REFERENCE
 =========

@@ -8,6 +8,7 @@ __pycache__/
 
 # Customized
 test.zip
+benchmark/
 
 # Distribution / packaging
 .Python

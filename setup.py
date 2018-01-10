@@ -50,8 +50,6 @@ setup(name='mtcnn',
       license='MIT',
       packages=setuptools.find_packages(),
       install_requires=[
-          "opencv-python",
-          "tensorflow"
       ],
       classifiers=[
           'Environment :: Console',
