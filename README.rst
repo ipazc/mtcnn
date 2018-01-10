@@ -59,8 +59,9 @@ The detector returns a list of JSON objects. Each JSON object contains three mai
 
 A good example of usage can be found in the file "`example.py`_." located in the root of this repository.
 
+
 BENCHMARK
-=========
+#########
 
 The following tables shows the benchmark of this mtcnn implementation running on an `Intel i7-3612QM CPU @ 2.10GHz <https://www.cpubenchmark.net/cpu.php?cpu=Intel+Core+i7-3612QM+%40+2.10GHz>`_, with a **CPU-based** Tensorflow 1.4.1.
 
@@ -92,6 +93,7 @@ The following tables shows the benchmark of this mtcnn implementation running on
 | 2100x994   | 2,087,400    | 1.286 seconds | 0.7 |
 +------------+--------------+---------------+-----+
 
+
 MODEL
 #####
 
@@ -103,6 +105,7 @@ to the module's path. It can be overriden by injecting it into the MTCNN() const
 The model must be numpy-based containing the 3 main keys "pnet", "rnet" and "onet", having each of them the weights of each of the layers of the network.
 
 For more reference about the network definition, take a close look at the paper from *Zhang et al. (2016)* [ZHANG2016]_.
+
 
 REFERENCE
 =========
