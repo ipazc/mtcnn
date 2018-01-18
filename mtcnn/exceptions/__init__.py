@@ -24,4 +24,6 @@
 #SOFTWARE.
 
 __author__ = "Iván de Paz Centeno"
-__version__= "0.0.4"
+
+class InvalidImage(Exception):
+    pass

@@ -38,6 +38,7 @@ import pkg_resources
 import tensorflow as tf
 from mtcnn.layer_factory import LayerFactory
 from mtcnn.network import Network
+from mtcnn.exceptions import InvalidImage
 
 __author__ = "Iván de Paz Centeno"
 
@@ -382,6 +383,8 @@ class MTCNN(object):
         :param img: image to process
         :return: list containing all the bounding boxes detected with their keypoints.
         """
+        if img is None or not hasattr(img, "shape"):
+            raise InvalidImage("Image not valid.")
 
         height, width, _ = img.shape
         stage_status = StageStatus(width=width, height=height)
@@ -500,7 +503,7 @@ class MTCNN(object):
                 tempimg[:, :, :, k] = cv2.resize(tmp, (24, 24), interpolation=cv2.INTER_AREA)
 
             else:
-                return np.empty(shape=(0,))
+                return np.empty(shape=(0,)), stage_status
 
 
         tempimg = (tempimg - 127.5) * 0.0078125
@@ -538,7 +541,7 @@ class MTCNN(object):
         """
         num_boxes = total_boxes.shape[0]
         if num_boxes == 0:
-            return total_boxes, []
+            return total_boxes, np.empty(shape=(0,))
 
         total_boxes = np.fix(total_boxes).astype(np.int32)
 
@@ -557,7 +560,7 @@ class MTCNN(object):
             if tmp.shape[0] > 0 and tmp.shape[1] > 0 or tmp.shape[0] == 0 and tmp.shape[1] == 0:
                 tempimg[:, :, :, k] = cv2.resize(tmp, (48, 48), interpolation=cv2.INTER_AREA)
             else:
-                return np.empty(shape=(0,))
+                return np.empty(shape=(0,)), np.empty(shape=(0,))
 
         tempimg = (tempimg - 127.5) * 0.0078125
         tempimg1 = np.transpose(tempimg, (3, 1, 0, 2))
