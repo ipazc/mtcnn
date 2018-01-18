@@ -12,9 +12,9 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y libglib2.0-0
 install:
-  - pip3 install -r requirements.txt
-  - pip3 install nose coverage
-  - pip3 install coveralls
+  - pip install -r requirements.txt
+  - pip install nose coverage
+  - pip install coveralls
 # # command to run tests, e.g. python setup.py test
 script:
   - python3 setup.py nosetests --with-coverage --cover-package mtcnn --verbosity=2
