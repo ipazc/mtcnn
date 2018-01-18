@@ -5,8 +5,6 @@ python:
   - "3.5-dev" # 3.5 development branch
   - "3.6"
   - "3.6-dev" # 3.6 development branch
-  - "3.7-dev" # 3.7 development branch
-  - "nightly"
 # command to install dependencies
 before_install:
   - sudo apt-get -qq update
