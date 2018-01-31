@@ -26,9 +26,10 @@ This implementation requires OpenCV>=3.2 and Tensorflow>=1.4.0 installed in the 
 
 They can be installed through pip (if pip version >= 9.0.1):
 
+
 .. code:: bash
 
-    $ pip3 install -r requirements.txt
+    $ pip3 install tensorflow==1.4.1 opencv-contrib-python==3.2.0.8
 
 or compiled directly from sources (`OpenCV3 <https://github.com/opencv/opencv/archive/3.4.0.zip>`_, `Tensorflow <https://www.tensorflow.org/install/install_sources>`_).
 
