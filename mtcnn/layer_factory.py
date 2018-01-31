@@ -208,9 +208,9 @@ class LayerFactory(object):
         """
         input_layer = self.__network.get_layer(input_layer_name)
 
-        max_axis = tf.reduce_max(input_layer, axis, keepdims=True)
+        max_axis = tf.reduce_max(input_layer, axis, keep_dims=True)
         target_exp = tf.exp(input_layer-max_axis)
-        normalize = tf.reduce_sum(target_exp, axis, keepdims=True)
+        normalize = tf.reduce_sum(target_exp, axis, keep_dims=True)
         softmax = tf.div(target_exp, normalize, name)
 
         self.__network.add_layer(name, layer_output=softmax)
