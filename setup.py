@@ -48,7 +48,7 @@ setup(name='mtcnn',
       author='Iván de Paz Centeno',
       author_email='ipazc@unileon.es',
       license='MIT',
-      packages=setuptools.find_packages(),
+      packages=setuptools.find_packages(exclude=["tests.*", "tests"]),
       install_requires=[
       ],
       classifiers=[
