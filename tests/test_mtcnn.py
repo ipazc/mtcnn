@@ -65,6 +65,22 @@ class TestMTCNN(unittest.TestCase):
         self.assertEqual(len(result), 0)
 
 
+    def test_mtcnn_multiple_instances(self):
+        """
+        Multiple instances of MTCNN can be created in the same thread.
+        :return:
+        """
+        detector_1 = MTCNN(steps_threshold=(.2, .7, .7))
+        detector_2 = MTCNN(steps_threshold=(.1, .1, .1))
+
+        ivan = cv2.imread("ivan.jpg")
+
+        faces_1 = detector_1.detect_faces(ivan)
+        faces_2 = detector_2.detect_faces(ivan)
+
+        self.assertEqual(len(faces_1), 1)
+        self.assertEqual(len(faces_2), 37)
+
     def tearDownClass():
         global mtcnn
         del mtcnn
