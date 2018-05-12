@@ -9,6 +9,7 @@ __pycache__/
 # Customized
 test.zip
 benchmark/
+debug.py
 
 # Distribution / packaging
 .Python

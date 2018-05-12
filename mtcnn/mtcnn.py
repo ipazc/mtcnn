@@ -187,17 +187,20 @@ class MTCNN(object):
         config = tf.ConfigProto(log_device_placement=False)
         config.gpu_options.allow_growth = True
 
-        self.__session = tf.Session(config=config)
+        self.__graph = tf.Graph()
 
-        weights = np.load(weights_file).item()
-        self.__pnet = PNet(self.__session, False)
-        self.__pnet.set_weights(weights['PNet'])
+        with self.__graph.as_default():
+            self.__session = tf.Session(config=config, graph=self.__graph)
 
-        self.__rnet = RNet(self.__session, False)
-        self.__rnet.set_weights(weights['RNet'])
+            weights = np.load(weights_file).item()
+            self.__pnet = PNet(self.__session, False)
+            self.__pnet.set_weights(weights['PNet'])
 
-        self.__onet = ONet(self.__session, False)
-        self.__onet.set_weights(weights['ONet'])
+            self.__rnet = RNet(self.__session, False)
+            self.__rnet.set_weights(weights['RNet'])
+
+            self.__onet = ONet(self.__session, False)
+            self.__onet.set_weights(weights['ONet'])
 
     def __compute_scale_pyramid(self, m, min_layer):
         scales = []
