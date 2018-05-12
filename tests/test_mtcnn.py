@@ -79,7 +79,7 @@ class TestMTCNN(unittest.TestCase):
         faces_2 = detector_2.detect_faces(ivan)
 
         self.assertEqual(len(faces_1), 1)
-        self.assertEqual(len(faces_2), 37)
+        self.assertGreater(len(faces_2), 1)
 
     def tearDownClass():
         global mtcnn
