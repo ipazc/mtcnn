@@ -202,6 +202,17 @@ class MTCNN(object):
             self.__onet = ONet(self.__session, False)
             self.__onet.set_weights(weights['ONet'])
 
+    @property
+    def min_face_size(self):
+        return self.__min_face_size
+    
+    @min_face_size.setter
+    def min_face_size(self, mfc=20):
+        try:
+            self.__min_face_size = int(mfc)
+        except ValueError:
+            self.__min_face_size = 20
+    
     def __compute_scale_pyramid(self, m, min_layer):
         scales = []
         factor_count = 0
