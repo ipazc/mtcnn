@@ -202,6 +202,8 @@ class MTCNN(object):
             self.__onet = ONet(self.__session, False)
             self.__onet.set_weights(weights['ONet'])
 
+        weights_file.close()
+
     @property
     def min_face_size(self):
         return self.__min_face_size

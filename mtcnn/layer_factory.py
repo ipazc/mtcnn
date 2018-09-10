@@ -24,6 +24,7 @@
 #SOFTWARE.
 
 import tensorflow as tf
+from distutils.version import LooseVersion
 
 __author__ = "Iván de Paz Centeno"
 
@@ -208,9 +209,15 @@ class LayerFactory(object):
         """
         input_layer = self.__network.get_layer(input_layer_name)
 
-        max_axis = tf.reduce_max(input_layer, axis, keep_dims=True)
-        target_exp = tf.exp(input_layer-max_axis)
-        normalize = tf.reduce_sum(target_exp, axis, keep_dims=True)
+        if LooseVersion(tf.__version__) < LooseVersion("1.5.0"):
+            max_axis = tf.reduce_max(input_layer, axis, keep_dims=True)
+            target_exp = tf.exp(input_layer - max_axis)
+            normalize = tf.reduce_sum(target_exp, axis, keep_dims=True)
+        else:
+            max_axis = tf.reduce_max(input_layer, axis, keepdims=True)
+            target_exp = tf.exp(input_layer - max_axis)
+            normalize = tf.reduce_sum(target_exp, axis, keepdims=True)
+
         softmax = tf.div(target_exp, normalize, name)
 
         self.__network.add_layer(name, layer_output=softmax)
