@@ -165,7 +165,7 @@ class MTCNN(object):
     """
 
     def __init__(self, weights_file: str=None, min_face_size: int=20, steps_threshold: list=None,
-                 scale_factor: float=0.709):
+                 scale_factor: float=0.709, tf_session_config=None ):
         """
         Initializes the MTCNN.
         :param weights_file: file uri with the weights of the P, R and O networks from MTCNN. By default it will load
@@ -184,13 +184,10 @@ class MTCNN(object):
         self.__steps_threshold = steps_threshold
         self.__scale_factor = scale_factor
 
-        config = tf.ConfigProto(log_device_placement=False)
-        config.gpu_options.allow_growth = True
-
         self.__graph = tf.Graph()
 
         with self.__graph.as_default():
-            self.__session = tf.Session(config=config, graph=self.__graph)
+            self.__session = tf.Session(config=tf_session_config, graph=self.__graph)
 
             weights = np.load(weights_file).item()
             self.__pnet = PNet(self.__session, False)
