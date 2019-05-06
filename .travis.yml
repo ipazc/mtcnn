@@ -8,7 +8,7 @@ python:
 # command to install dependencies
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y libglib2.0-0
+  - sudo apt-get install -y libglib2.0-0 libsm6 libxrender1 libfontconfig1
 install:
   - pip install -r requirements.txt
   - pip install nose coverage
