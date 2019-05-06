@@ -192,7 +192,7 @@ class MTCNN(object):
         with self.__graph.as_default():
             self.__session = tf.Session(config=config, graph=self.__graph)
 
-            weights = np.load(weights_file).item()
+            weights = np.load(weights_file, allow_pickle=True).item()
             self.__pnet = PNet(self.__session, False)
             self.__pnet.set_weights(weights['PNet'])
 
