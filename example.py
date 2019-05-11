@@ -12,6 +12,7 @@ start = timeit.timeit()
 result = detector.detect_faces(image)
 end = timeit.timeit()
 print (end - start)
+print("test")
 # Result is an array with all the bounding boxes detected. We know that for 'ivan.jpg' there is only one.
 bounding_box = result[0]['box']
 keypoints = result[0]['keypoints']
