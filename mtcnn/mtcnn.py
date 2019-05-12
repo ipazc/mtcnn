@@ -250,7 +250,7 @@ class MTCNN(object):
     def __generate_bounding_box(imap, reg, scale, t):
 
         # use heatmap to generate bounding boxes
-        stride = 0
+        stride = 1
         cellsize = 12
 
         imap = np.transpose(imap)
