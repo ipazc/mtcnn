@@ -3,14 +3,14 @@
 
 import cv2
 from mtcnn.mtcnn import MTCNN
-import timeit
+import time
 
 detector = MTCNN()
 
 image = cv2.imread("ivan.jpg")
-start = timeit.timeit()
+start = time.time()
 result = detector.detect_faces(image)
-end = timeit.timeit()
+end = time.time()
 print (end - start)
 print("test")
 # Result is an array with all the bounding boxes detected. We know that for 'ivan.jpg' there is only one.
