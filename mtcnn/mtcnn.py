@@ -213,7 +213,7 @@ class MTCNN(object):
         try:
             self.__min_face_size = int(mfc)
         except ValueError:
-            self.__min_face_size = 20
+            self.__min_face_size = 28
     
     def __compute_scale_pyramid(self, m, min_layer):
         scales = []
