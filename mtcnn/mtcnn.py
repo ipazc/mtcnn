@@ -213,7 +213,7 @@ class MTCNN(object):
         try:
             self.__min_face_size = int(mfc)
         except ValueError:
-            self.__min_face_size = 28
+            self.__min_face_size = 20
     
     def __compute_scale_pyramid(self, m, min_layer):
         scales = []
@@ -250,7 +250,7 @@ class MTCNN(object):
     def __generate_bounding_box(imap, reg, scale, t):
 
         # use heatmap to generate bounding boxes
-        stride = 4
+        stride = 2
         cellsize = 12
 
         imap = np.transpose(imap)

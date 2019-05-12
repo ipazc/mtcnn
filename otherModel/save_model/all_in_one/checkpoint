@@ -1,0 +1,2 @@
+model_checkpoint_path: "mtcnn_tf"
+all_model_checkpoint_paths: "mtcnn_tf"
