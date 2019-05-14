@@ -15,13 +15,11 @@ print (end - start)
 print("test")
 # Result is an array with all the bounding boxes detected. We know that for 'ivan.jpg' there is only one.
 print (result)
-bounding_box = result[0]['box']
-keypoints = result[0]['keypoints']
-print(bounding_box)
-print(keypoints)
-for i in len(result):
-  
 
+
+for detection in result:
+    bounding_box = detection['box']
+    keypoints = detection['keypoints']
     cv2.rectangle(image,
                   (bounding_box[0], bounding_box[1]),
                   (bounding_box[0]+bounding_box[2], bounding_box[1] + bounding_box[3]),
