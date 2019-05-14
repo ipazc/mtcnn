@@ -7,7 +7,7 @@ import time
 
 detector = MTCNN()
 
-image = cv2.imread("ivan.jpg")
+image = cv2.imread("test.jpg")
 start = time.time()
 result = detector.detect_faces(image)
 end = time.time()
