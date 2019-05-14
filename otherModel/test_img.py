@@ -103,7 +103,7 @@ def main(args):
                             'Placeholder_2:0': img})
 
                 start_time = time.time()
-                rectangles, points = detect_face(img,15,
+                rectangles, points = detect_face(img,20,
                                                  pnet_fun, rnet_fun, onet_fun,
                                                  args.threshold, args.factor)
                 print("testing points %f",points[0])
