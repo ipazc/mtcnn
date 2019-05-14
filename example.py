@@ -14,7 +14,7 @@ end = time.time()
 print (end - start)
 print("test")
 # Result is an array with all the bounding boxes detected. We know that for 'ivan.jpg' there is only one.
-
+print (result)
 for i in len(result):
     bounding_box = result[0]['box']
     keypoints = result[0]['keypoints']
