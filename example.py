@@ -18,7 +18,7 @@ print (result)
 bounding_box = result[0]['box']
 keypoints = result[0]['keypoints']
 print(bounding_box)
-print(keypoints)keypoints
+print(keypoints)
 for i in len(result):
   
 
