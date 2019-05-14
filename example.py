@@ -7,7 +7,7 @@ import time
 
 detector = MTCNN()
 
-image = cv2.imread("test.jpg")
+image = cv2.imread("test1.jpg")
 start = time.time()
 result = detector.detect_faces(image)
 end = time.time()
@@ -29,6 +29,6 @@ for i in len(result):
     cv2.circle(image,(keypoints['mouth_left']), 2, (0,155,255), 2)
     cv2.circle(image,(keypoints['mouth_right']), 2, (0,155,255), 2)
 
-cv2.imwrite("ivan_drawn.jpg", image)
+cv2.imwrite("result.jpg", image)
 
 print(result)
