@@ -65,7 +65,7 @@ class LayerFactory(object):
             #dim = operator.mul(*(input_shape[1:].as_list()))
             vectorized_input = tf.reshape(input_layer, [-1, dim])
         else:
-            vectorized_input, dim = (input_layer, input_shape[-1].value)
+            vectorized_input, dim = (input_layer, input_shape[-1])
 
         return vectorized_input, dim
 
@@ -76,7 +76,8 @@ class LayerFactory(object):
         :param shape: list defining the shape of the variable.
         :return: created TF variable.
         """
-        return tf.get_variable(name, shape, trainable=self.__network.is_trainable())
+        return tf.compat.v1.get_variable(name, shape, trainable=self.__network.is_trainable(),
+                                         use_resource=False)
 
     def new_feed(self, name: str, layer_shape: tuple):
         """
@@ -85,7 +86,7 @@ class LayerFactory(object):
         :return:
         """
 
-        feed_data = tf.placeholder(tf.float32, layer_shape, 'input')
+        feed_data = tf.compat.v1.placeholder(tf.float32, layer_shape, 'input')
         self.__network.add_layer(name, layer_output=feed_data)
 
     def new_conv(self, name: str, kernel_size: tuple, channels_output: int,
@@ -117,10 +118,12 @@ class LayerFactory(object):
         self.__validate_grouping(channels_input, channels_output, group)
 
         # Convolution for a given input and kernel
-        convolve = lambda input_val, kernel: tf.nn.conv2d(input_val, kernel, [1, stride_size[1], stride_size[0], 1],
-                                                          padding=padding)
+        convolve = lambda input_val, kernel: tf.nn.conv2d(input=input_val,
+                filters=kernel, 
+                strides=[1, stride_size[1], stride_size[0], 1],
+                padding=padding)
 
-        with tf.variable_scope(name) as scope:
+        with tf.compat.v1.variable_scope(name) as scope:
             kernel = self.__make_var('weights', shape=[kernel_size[1], kernel_size[0], channels_input // group, channels_output])
 
             output = convolve(input_layer, kernel)
@@ -145,7 +148,7 @@ class LayerFactory(object):
         """
         input_layer = self.__network.get_layer(input_layer_name)
 
-        with tf.variable_scope(name):
+        with tf.compat.v1.variable_scope(name):
             channels_input = int(input_layer.get_shape()[-1])
             alpha = self.__make_var('alpha', shape=[channels_input])
             output = tf.nn.relu(input_layer) + tf.multiply(alpha, -tf.nn.relu(-input_layer))
@@ -168,7 +171,7 @@ class LayerFactory(object):
 
         input_layer = self.__network.get_layer(input_layer_name)
 
-        output = tf.nn.max_pool(input_layer,
+        output = tf.nn.max_pool2d(input=input_layer,
                                 ksize=[1, kernel_size[1], kernel_size[0], 1],
                                 strides=[1, stride_size[1], stride_size[0], 1],
                                 padding=padding,
@@ -187,13 +190,13 @@ class LayerFactory(object):
         the network.
         """
 
-        with tf.variable_scope(name):
+        with tf.compat.v1.variable_scope(name):
             input_layer = self.__network.get_layer(input_layer_name)
             vectorized_input, dimension = self.vectorize_input(input_layer)
 
             weights = self.__make_var('weights', shape=[dimension, output_count])
             biases = self.__make_var('biases', shape=[output_count])
-            operation = tf.nn.relu_layer if relu else tf.nn.xw_plus_b
+            operation = tf.compat.v1.nn.relu_layer if relu else tf.compat.v1.nn.xw_plus_b
 
             fc = operation(vectorized_input, weights, biases, name=name)
 
@@ -210,15 +213,15 @@ class LayerFactory(object):
         input_layer = self.__network.get_layer(input_layer_name)
 
         if LooseVersion(tf.__version__) < LooseVersion("1.5.0"):
-            max_axis = tf.reduce_max(input_layer, axis, keep_dims=True)
+            max_axis = tf.reduce_max(input_tensor=input_layer, axis=axis, keepdims=True)
             target_exp = tf.exp(input_layer - max_axis)
-            normalize = tf.reduce_sum(target_exp, axis, keep_dims=True)
+            normalize = tf.reduce_sum(input_tensor=target_exp, axis=axis, keepdims=True)
         else:
-            max_axis = tf.reduce_max(input_layer, axis, keepdims=True)
+            max_axis = tf.reduce_max(input_tensor=input_layer, axis=axis, keepdims=True)
             target_exp = tf.exp(input_layer - max_axis)
-            normalize = tf.reduce_sum(target_exp, axis, keepdims=True)
+            normalize = tf.reduce_sum(input_tensor=target_exp, axis=axis, keepdims=True)
 
-        softmax = tf.div(target_exp, normalize, name)
+        softmax = tf.compat.v1.div(target_exp, normalize, name)
 
         self.__network.add_layer(name, layer_output=softmax)
 

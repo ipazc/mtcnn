@@ -184,13 +184,13 @@ class MTCNN(object):
         self.__steps_threshold = steps_threshold
         self.__scale_factor = scale_factor
 
-        config = tf.ConfigProto(log_device_placement=False)
+        config = tf.compat.v1.ConfigProto(log_device_placement=False)
         config.gpu_options.allow_growth = True
 
         self.__graph = tf.Graph()
 
         with self.__graph.as_default():
-            self.__session = tf.Session(config=config, graph=self.__graph)
+            self.__session = tf.compat.v1.Session(config=config, graph=self.__graph)
 
             weights = np.load(weights_file, allow_pickle=True).item()
             self.__pnet = PNet(self.__session, False)
