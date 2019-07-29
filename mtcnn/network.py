@@ -40,7 +40,7 @@ class Network(object):
         self.__layers = {}
         self.__last_layer_name = None
 
-        with tf.variable_scope(self.__class__.__name__.lower()):
+        with tf.compat.v1.variable_scope(self.__class__.__name__.lower()):
             self._config()
 
     def _config(self):
@@ -84,12 +84,12 @@ class Network(object):
         """
         network_name = self.__class__.__name__.lower()
 
-        with tf.variable_scope(network_name):
+        with tf.compat.v1.variable_scope(network_name):
             for layer_name in weights_values:
-                with tf.variable_scope(layer_name, reuse=True):
+                with tf.compat.v1.variable_scope(layer_name, reuse=True):
                     for param_name, data in weights_values[layer_name].items():
                         try:
-                            var = tf.get_variable(param_name)
+                            var = tf.compat.v1.get_variable(param_name, use_resource=False)
                             self._session.run(var.assign(data))
 
                         except ValueError:
@@ -104,7 +104,7 @@ class Network(object):
         """
         network_name = self.__class__.__name__.lower()
 
-        with tf.variable_scope(network_name):
+        with tf.compat.v1.variable_scope(network_name):
             return self._feed(image)
 
     def _feed(self, image):
