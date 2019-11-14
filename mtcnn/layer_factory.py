@@ -221,7 +221,7 @@ class LayerFactory(object):
             target_exp = tf.exp(input_layer - max_axis)
             normalize = tf.reduce_sum(input_tensor=target_exp, axis=axis, keepdims=True)
 
-        softmax = tf.compat.v1.div(target_exp, normalize, name)
+        softmax = tf.math.divide(target_exp, normalize, name)
 
         self.__network.add_layer(name, layer_output=softmax)
 
