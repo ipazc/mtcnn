@@ -2,14 +2,15 @@ import unittest
 import cv2
 
 from mtcnn.exceptions import InvalidImage
-from mtcnn.mtcnn import MTCNN
+from mtcnn import MTCNN
 
 mtcnn = None
 
 
 class TestMTCNN(unittest.TestCase):
 
-    def setUpClass():
+    @classmethod
+    def setUpClass(cls):
         global mtcnn
         mtcnn = MTCNN()
 
@@ -70,8 +71,8 @@ class TestMTCNN(unittest.TestCase):
         Multiple instances of MTCNN can be created in the same thread.
         :return:
         """
-        detector_1 = MTCNN(steps_threshold=(.2, .7, .7))
-        detector_2 = MTCNN(steps_threshold=(.1, .1, .1))
+        detector_1 = MTCNN(steps_threshold=[.2, .7, .7])
+        detector_2 = MTCNN(steps_threshold=[.1, .1, .1])
 
         ivan = cv2.imread("ivan.jpg")
 
@@ -81,9 +82,11 @@ class TestMTCNN(unittest.TestCase):
         self.assertEqual(len(faces_1), 1)
         self.assertGreater(len(faces_2), 1)
 
-    def tearDownClass():
+    @classmethod
+    def tearDownClass(cls):
         global mtcnn
         del mtcnn
+
 
 if __name__ == '__main__':
     unittest.main()

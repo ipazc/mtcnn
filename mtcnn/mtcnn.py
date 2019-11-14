@@ -33,7 +33,7 @@ import cv2
 import numpy as np
 import pkg_resources
 
-from mtcnn.exceptions.invalid_image import InvalidImage
+from mtcnn.exceptions import InvalidImage
 from mtcnn.network.factory import NetworkFactory
 
 
