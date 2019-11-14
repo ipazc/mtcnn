@@ -1,3 +1,2 @@
-tensorflow>=1.12.1
+keras>=2.0.0
 opencv-python>=4.1.0
-

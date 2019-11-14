@@ -7,7 +7,7 @@ MTCNN
     :target: https://travis-ci.org/ipazc/mtcnn
 
 
-Implementation of the MTCNN face detector for TensorFlow in Python3.4+. It is written from scratch, using as a reference the implementation of
+Implementation of the MTCNN face detector for Keras in Python3.4+. It is written from scratch, using as a reference the implementation of
 MTCNN from David Sandberg (`FaceNet's MTCNN <https://github.com/davidsandberg/facenet/tree/master/src/align>`_) in Facenet. It is based on the paper *Zhang, K et al. (2016)* [ZHANG2016]_.
 
 .. image:: https://github.com/ipazc/mtcnn/raw/master/result.jpg
@@ -20,24 +20,22 @@ Currently it is only supported Python3.4 onwards. It can be installed through pi
 
 .. code:: bash
 
-    $ pip3 install mtcnn
+    $ pip install mtcnn
 
-This implementation requires OpenCV>=4.1 and Tensorflow>=1.12.1 installed in the system, with bindings for Python3.
-
-They can be installed through pip (if pip version >= 9.0.1):
-
+This implementation requires OpenCV>=4.1 and Keras>=2.0.0 (any Tensorflow supported by Keras will be supported by this MTCNN package).
+If this is the first time you use tensorflow, you will probably need to install it in your system:
 
 .. code:: bash
 
-    $ pip3 install tensorflow==1.12.1 opencv-contrib-python==4.1.0
+    $ pip install tensorflow
 
-or compiled directly from sources (`OpenCV4 <https://github.com/opencv/opencv/archive/4.1.0.zip>`_, `Tensorflow <https://www.tensorflow.org/install/install_sources>`_).
-
-Note that a tensorflow-gpu version can be used instead if a GPU device is available on the system, which will speedup the results. It can be installed with pip:
+or with `conda`
 
 .. code:: bash
 
-    $ pip3 install tensorflow-gpu\>=1.12.0
+    $ conda install tensorflow
+
+Note that `tensorflow-gpu` version can be used instead if a GPU device is available on the system, which will speedup the results.
 
 USAGE
 #####
@@ -47,13 +45,26 @@ The following example illustrates the ease of use of this package:
 
 .. code:: python
 
-    >>> from mtcnn.mtcnn import MTCNN
+    >>> from mtcnn import MTCNN
     >>> import cv2
     >>>
     >>> img = cv2.cvtColor(cv2.imread("ivan.jpg"), cv2.COLOR_BGR2RGB)
     >>> detector = MTCNN()
-    >>> print(detector.detect_faces(img))
-    [{'box': [277, 90, 48, 63], 'keypoints': {'nose': (303, 131), 'mouth_right': (313, 141), 'right_eye': (314, 114), 'left_eye': (291, 117), 'mouth_left': (296, 143)}, 'confidence': 0.99851983785629272}]
+    >>> detector.detect_faces(img)
+    [
+        {
+            'box': [277, 90, 48, 63],
+            'keypoints':
+            {
+                'nose': (303, 131),
+                'mouth_right': (313, 141),
+                'right_eye': (314, 114),
+                'left_eye': (291, 117),
+                'mouth_left': (296, 143)
+            },
+            'confidence': 0.99851983785629272
+        }
+    ]
 
 The detector returns a list of JSON objects. Each JSON object contains three main keys: 'box', 'confidence' and 'keypoints':
 
@@ -121,4 +132,3 @@ REFERENCE
 
 .. _example.py: example.py
 .. _MIT license: LICENSE
-
