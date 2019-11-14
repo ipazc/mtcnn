@@ -184,7 +184,7 @@ class MTCNN(object):
         self.__steps_threshold = steps_threshold
         self.__scale_factor = scale_factor
 
-        config = tf.compat.v1.ConfigProto(log_device_placement=False)
+        config = tf.compat.v1.ConfigPhoto(log_device_placement=False)
         config.gpu_options.allow_growth = True
 
         self.__graph = tf.Graph()
