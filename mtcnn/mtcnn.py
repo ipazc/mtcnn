@@ -36,7 +36,6 @@ import pkg_resources
 from mtcnn.exceptions import InvalidImage
 from mtcnn.network.factory import NetworkFactory
 
-
 __author__ = "Iván de Paz Centeno"
 
 
@@ -86,7 +85,6 @@ class MTCNN(object):
         self._scale_factor = scale_factor
 
         self._pnet, self._rnet, self._onet = NetworkFactory().build_P_R_O_nets_from_file(weights_file)
-
 
     @property
     def min_face_size(self):
@@ -307,7 +305,7 @@ class MTCNN(object):
 
         for bounding_box, keypoints in zip(total_boxes, points.T):
             bounding_boxes.append({
-                'box': [int(bounding_box[0]), int(bounding_box[1]),
+                'box': [max(0, int(bounding_box[0])), max(0, int(bounding_box[1])),
                         int(bounding_box[2] - bounding_box[0]), int(bounding_box[3] - bounding_box[1])],
                 'confidence': bounding_box[-1],
                 'keypoints': {
