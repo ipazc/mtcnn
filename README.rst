@@ -37,6 +37,14 @@ or with `conda`
 
 Note that `tensorflow-gpu` version can be used instead if a GPU device is available on the system, which will speedup the results.
 
+Installing OpenCV-python can be done through
+
+.. code:: bash
+
+    $ pip install opencv-python>=4.1
+
+or it can be installed as part of the OpenCV installation, in the form of python bindings. 
+
 USAGE
 #####
 
