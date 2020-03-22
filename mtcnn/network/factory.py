@@ -23,8 +23,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from tf.keras.layers import Input, Dense, Conv2D, MaxPooling2D, PReLU, Flatten, Softmax
-from tf.keras.models import Model
+from tensorflow.keras.layers import Input, Dense, Conv2D, MaxPooling2D, PReLU, Flatten, Softmax
+from tensorflow.keras.models import Model
 
 import numpy as np
 
