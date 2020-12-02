@@ -304,12 +304,12 @@ class MTCNN(object):
         bounding_boxes = []
 
         for bounding_box, keypoints in zip(total_boxes, points.T):
-            x = max(0, int(bounding_box[0]))
-            y = max(0, int(bounding_box[1]))
-            width = int(bounding_box[2] - x)
-            height = int(bounding_box[3] - y)
+            xmin = max(0, int(bounding_box[0]))
+            ymin = max(0, int(bounding_box[1]))
+            xmax = int(bounding_box[2])
+            ymax = int(bounding_box[3])
             bounding_boxes.append({
-                'box': [x, y, width, height],
+                'box': [xmin, ymin, xmax, ymax],
                 'confidence': bounding_box[-1],
                 'keypoints': {
                     'left_eye': (int(keypoints[0]), int(keypoints[5])),
