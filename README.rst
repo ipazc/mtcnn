@@ -72,7 +72,7 @@ The detector returns a list of JSON objects. Each JSON object contains three mai
 - The confidence is the probability for a bounding box to be matching a face.
 - The keypoints are formatted into a JSON object with the keys 'left_eye', 'right_eye', 'nose', 'mouth_left', 'mouth_right'. Each keypoint is identified by a pixel position (x, y).
 
-Another good example of usage can be found in the file "`example.py`_." located in the root of this repository.
+Another good example of usage can be found in the file "`example.py`_." located in the root of this repository. Also, you can run the Jupyter Notebook "`example.ipynb`_" for another example of usage.
 
 BENCHMARK
 =========
@@ -131,4 +131,5 @@ REFERENCE
 .. [ZHANG2016] Zhang, K., Zhang, Z., Li, Z., and Qiao, Y. (2016). Joint face detection and alignment using multitask cascaded convolutional networks. IEEE Signal Processing Letters, 23(10):1499–1503.
 
 .. _example.py: example.py
+.. _example.ipynb: example.ipynb
 .. _MIT license: LICENSE
