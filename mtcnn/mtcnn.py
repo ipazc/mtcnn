@@ -68,7 +68,7 @@ class MTCNN(object):
                  scale_factor: float = 0.709):
         """
         Initializes the MTCNN.
-        :param weights_file: file uri with the weights of the P, R and O networks from MTCNN. By default it will load
+        :param weights_file: file url with the weights of the P, R and O networks from MTCNN. By default it will load
         the ones bundled with the package.
         :param min_face_size: minimum size of the face to detect
         :param steps_threshold: step's thresholds values
