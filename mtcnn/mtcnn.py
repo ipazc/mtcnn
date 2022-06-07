@@ -32,7 +32,6 @@
 import cv2
 import numpy as np
 import pkg_resources
-
 from mtcnn.exceptions import InvalidImage
 from mtcnn.network.factory import NetworkFactory
 
@@ -210,7 +209,7 @@ class MTCNN(object):
             i = sorted_s[-1]
             pick[counter] = i
             counter += 1
-            idx = sorted_s[0:-1]
+            idx = sorted_s[:-1]
 
             xx1 = np.maximum(x1[i], x1[idx])
             yy1 = np.maximum(y1[i], y1[idx])
@@ -222,14 +221,14 @@ class MTCNN(object):
 
             inter = w * h
 
-            if method is "Min":
+            if method == "Min":
                 o = inter / np.minimum(area[i], area[idx])
             else:
                 o = inter / (area[i] + area[idx] - inter)
 
             sorted_s = sorted_s[np.where(o <= threshold)]
 
-        pick = pick[0:counter]
+        pick = pick[:counter]
 
         return pick
 
@@ -317,7 +316,6 @@ class MTCNN(object):
         # We pipe here each of the stages
         for stage in stages:
             result = stage(img, result[0], result[1])
-
         [total_boxes, points] = result
 
         bounding_boxes = []
@@ -356,17 +354,13 @@ class MTCNN(object):
         :param stage_status:
         :return:
         """
-        total_boxes = np.empty((0, 9))
+        total_boxes = []
         status = stage_status
-
         for scale in scales:
             scaled_image = self.__scale_image(image, scale)
-
             img_x = np.expand_dims(scaled_image, 0)
             img_y = np.transpose(img_x, (0, 2, 1, 3))
-
             out = self._pnet(img_y)
-
             out0 = np.transpose(out[0], (0, 2, 1, 3))
             out1 = np.transpose(out[1], (0, 2, 1, 3))
 
@@ -381,8 +375,8 @@ class MTCNN(object):
             pick = self.__nms(boxes.copy(), 0.5, "Union")
             if boxes.size > 0 and pick.size > 0:
                 boxes = boxes[pick, :]
-                total_boxes = np.append(total_boxes, boxes, axis=0)
-
+                total_boxes.append(boxes)
+        total_boxes = np.vstack(total_boxes) if total_boxes else np.empty((0, 9))
         numboxes = total_boxes.shape[0]
 
         if numboxes > 0:
@@ -427,7 +421,7 @@ class MTCNN(object):
         # second stage
         tempimg = np.zeros(shape=(24, 24, 3, num_boxes))
 
-        for k in range(0, num_boxes):
+        for k in range(num_boxes):
             tmp = np.zeros((int(stage_status.tmph[k]), int(stage_status.tmpw[k]), 3))
 
             tmp[
@@ -457,7 +451,6 @@ class MTCNN(object):
         tempimg1 = np.transpose(tempimg, (3, 1, 0, 2))
 
         out = self._rnet(tempimg1)
-
         out0 = np.transpose(out[0])
         out1 = np.transpose(out[1])
 
@@ -502,7 +495,7 @@ class MTCNN(object):
 
         tempimg = np.zeros((48, 48, 3, num_boxes))
 
-        for k in range(0, num_boxes):
+        for k in range(num_boxes):
 
             tmp = np.zeros((int(status.tmph[k]), int(status.tmpw[k]), 3))
 
