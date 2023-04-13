@@ -203,7 +203,7 @@ class MTCNN(object):
 
             inter = w * h
 
-            if method is 'Min':
+            if method == 'Min':
                 o = inter / np.minimum(area[i], area[idx])
             else:
                 o = inter / (area[i] + area[idx] - inter)
@@ -275,7 +275,7 @@ class MTCNN(object):
         boundingbox[:, 0:4] = np.transpose(np.vstack([b1, b2, b3, b4]))
         return boundingbox
 
-    def detect_faces(self, img) -> list:
+    def detect_faces(self, img, verbose=1) -> list:
         """
         Detects bounding boxes from the specified image.
         :param img: image to process
@@ -297,7 +297,7 @@ class MTCNN(object):
 
         # We pipe here each of the stages
         for stage in stages:
-            result = stage(img, result[0], result[1])
+            result = stage(img, result[0], result[1], verbose=verbose)
 
         [total_boxes, points] = result
 
@@ -322,7 +322,7 @@ class MTCNN(object):
 
         return bounding_boxes
 
-    def __stage1(self, image, scales: list, stage_status: StageStatus):
+    def __stage1(self, image, scales: list, stage_status: StageStatus, verbose=1):
         """
         First stage of the MTCNN.
         :param image:
@@ -339,7 +339,7 @@ class MTCNN(object):
             img_x = np.expand_dims(scaled_image, 0)
             img_y = np.transpose(img_x, (0, 2, 1, 3))
 
-            out = self._pnet.predict(img_y)
+            out = self._pnet.predict(img_y, verbose=verbose)
 
             out0 = np.transpose(out[0], (0, 2, 1, 3))
             out1 = np.transpose(out[1], (0, 2, 1, 3))
@@ -376,7 +376,7 @@ class MTCNN(object):
 
         return total_boxes, status
 
-    def __stage2(self, img, total_boxes, stage_status: StageStatus):
+    def __stage2(self, img, total_boxes, stage_status: StageStatus, verbose=1):
         """
         Second stage of the MTCNN.
         :param img:
@@ -407,7 +407,7 @@ class MTCNN(object):
         tempimg = (tempimg - 127.5) * 0.0078125
         tempimg1 = np.transpose(tempimg, (3, 1, 0, 2))
 
-        out = self._rnet.predict(tempimg1)
+        out = self._rnet.predict(tempimg1, verbose=verbose)
 
         out0 = np.transpose(out[0])
         out1 = np.transpose(out[1])
@@ -428,7 +428,7 @@ class MTCNN(object):
 
         return total_boxes, stage_status
 
-    def __stage3(self, img, total_boxes, stage_status: StageStatus):
+    def __stage3(self, img, total_boxes, stage_status: StageStatus, verbose=1):
         """
         Third stage of the MTCNN.
 
@@ -463,7 +463,7 @@ class MTCNN(object):
         tempimg = (tempimg - 127.5) * 0.0078125
         tempimg1 = np.transpose(tempimg, (3, 1, 0, 2))
 
-        out = self._onet.predict(tempimg1)
+        out = self._onet.predict(tempimg1,verbose=verbose)
         out0 = np.transpose(out[0])
         out1 = np.transpose(out[1])
         out2 = np.transpose(out[2])
