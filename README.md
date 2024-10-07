@@ -5,7 +5,6 @@
 ![Test Status](https://github.com/ipazc/mtcnn/actions/workflows/tests.yml/badge.svg)
 ![Pylint Check](https://github.com/ipazc/mtcnn/actions/workflows/pylint.yml/badge.svg)
 ![PyPI Downloads](https://img.shields.io/pypi/dm/mtcnn)
-![PyPI Total Downloads](https://img.shields.io/pypi/dt/mtcnn)
 
 
 ## Overview
