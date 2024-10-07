@@ -40,9 +40,9 @@ Determines the format of the bounding boxes in the output. You can choose betwee
 This defines the format in which the detection results are returned. You can choose between:
 
 - `"json"`: The output is a list of dictionaries, each containing:
-    - `'box'`: The bounding box coordinates.
-    - `'keypoints'`: A dictionary with the detected landmarks.
-    - `'confidence'`: The confidence score of the detection.
+    - `"box"`: The bounding box coordinates.
+    - `"keypoints"`: A dictionary with the detected landmarks.
+    - `"confidence"`: The confidence score of the detection.
 - `"numpy"`: The output is a NumPy array with structured data.
 
 **When to adjust**: Use `"numpy"` if you are processing the results programmatically and prefer working with NumPy arrays.
