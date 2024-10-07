@@ -20,5 +20,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from mtcnn.mtcnn import MTCNN
+from abc import ABC, abstractmethod
 
+
+class StageBase(ABC):
+
+    def __init__(self, stage_name, stage_id, model=None, *args, **kwargs):
+        self._name = stage_name
+        self._id = stage_id
+        self._model = model
+        
+    @property
+    def model(self):
+        return self._model
+        
+    @property
+    def id(self):
+        return self._id
+    
+    @property    
+    def name(self):
+        return self._name
+
+    @abstractmethod
+    def __call__(self, *args, **kwargs):
+        pass

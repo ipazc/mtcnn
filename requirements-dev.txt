@@ -1,0 +1,6 @@
+pytest>=8.3.3
+pytest-cov>=5.0.0
+mkdocs>=1.6.1
+mkdocs-material>=9.5.39
+mkdocs-jupyter>=0.25.0
+
