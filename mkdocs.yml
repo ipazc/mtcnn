@@ -1,0 +1,44 @@
+site_name: MTCNN Documentation
+site_description: "Detailed Documentation for MTCNN Package"
+site_url: https://mtcnn.readthedocs.io/en/latest/
+repo_url: https://github.com/ipazc/mtcnn
+
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - Introduction: introduction.md
+  - Networks: stages.md
+  - Usage:
+      - Basic Usage: usage.md
+      - Advanced Usage: usage_advanced.md
+      - Detection Parameters: usage_params.md
+  - Ablation Study: 
+      - Ablation Overview: ablation.md
+      - PNet ablation: notebooks-docs/pnet_ablation.ipynb
+      - RNet ablation: notebooks-docs/rnet_ablation.ipynb
+      - ONet ablation: notebooks-docs/onet_ablation.ipynb
+  - Training Guide: training.md
+  - References: references.md
+
+
+plugins:
+  - search
+  - mkdocs-jupyter
+
+markdown_extensions:
+  - toc:
+      permalink: True
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  
+extra_css:
+  - css/custom.css
+      
+docs_dir: docs

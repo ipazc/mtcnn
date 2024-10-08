@@ -1,2 +1,2 @@
-keras>=2.0.0
-opencv-python>=4.1.0
+joblib>=1.4.2
+lz4>=4.3.3
