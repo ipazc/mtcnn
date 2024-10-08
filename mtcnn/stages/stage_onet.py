@@ -20,6 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# pylint: disable=duplicate-code
+
+import numpy as np
+
 from mtcnn.network.onet import ONet
 
 from mtcnn.utils.tensorflow import load_weights
@@ -28,8 +32,6 @@ from mtcnn.utils.bboxes import replace_confidence, adjust_bboxes, pick_matches, 
 from mtcnn.utils.landmarks import adjust_landmarks
 
 from mtcnn.stages.base import StageBase
-
-import numpy as np
 
 
 class StageONet(StageBase):
@@ -43,7 +45,7 @@ class StageONet(StageBase):
         stage_id (int): Unique identifier for the stage. Defaults to 3.
         weights (str): Path to the weights file to load the model. Defaults to "onet.lz4".
     """
-    
+
     def __init__(self, stage_name="Stage ONET", stage_id=3, weights="onet.lz4"):
         """
         Initializes the StageONet by loading the ONet model and setting the specified weights.

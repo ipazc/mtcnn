@@ -40,13 +40,13 @@ def build_scale_pyramid(width, height, min_face_size, scale_factor, min_size=12)
     Returns:
         np.ndarray: Array of scales to apply to the image at each level of the pyramid.
     """
-    
+
     # Find the smallest dimension of the image
     min_dim = min(width, height)
-    
+
     # Calculate how many scales are needed based on the smallest dimension and the scale factor
     scales_count = round(-((np.log(min_dim / min_size) / np.log(scale_factor)) + 1))
-    
+
     # Calculate the base scale value (based on the smallest detectable face size)
     m = min_size / min_face_size
 
@@ -72,18 +72,18 @@ def scale_images(images, scale: float=None, new_shape: tuple=None):
         tf.Tensor: The scaled images as a tensor with resized dimensions, determined either by the scaling factor 
                    or the new shape provided.
     """
-    
+
     # Extract the shape from the images
     shape = np.asarray(images.shape[-3:-1])
 
     if scale is None and new_shape is None:
         new_shape = shape
-            
+
     new_shape = shape * scale if new_shape is None else new_shape
-         
+
     # Resize the images using the specified scaling factor
     images_scaled = tf.image.resize(images, new_shape, method=tf.image.ResizeMethod.AREA)
-    
+
     return images_scaled
 
 
@@ -97,7 +97,7 @@ def normalize_images(images):
 
     Returns:
         np.ndarray or tf.Tensor: The normalized images, where pixel values are rescaled to the range [-1, 1].
-    """    
+    """
     # Normalize the images to the range [-1, 1]
     return (images - 127.5) / 128
 
@@ -118,20 +118,20 @@ def pad_stack_np(images, justification="center"):
         np.ndarray: A stacked NumPy array of each original shape.
         np.ndarray: A NumPy array containing the padding parameters applied to each image.
     """
-    
+
     # Stack the shapes of all images into an array
     sizes_stack = np.stack([img.shape for img in images], axis=0)
-    
+
     # Find the maximum shape along each dimension
     sizes_max = sizes_stack.max(axis=0, keepdims=True)
-    
+
     # Calculate the difference in size for padding
     sizes_diff = sizes_max - sizes_stack
-    
+
     # Calculate if any padding size is odd, to adjust padding
     sizes_mod = sizes_diff % 2
     sizes_diff = sizes_diff - sizes_mod
-    
+
     # Justification masks for padding alignment
     justification_mask = {
         "top": np.asarray([[[0, 1], [0.5, 0.5], [0, 0]]]),
@@ -144,7 +144,7 @@ def pad_stack_np(images, justification="center"):
         "right": np.asarray([[[0.5, 0.5], [1, 0], [0, 0]]]),
         "center": np.asarray([[[0.5, 0.5], [0.5, 0.5], [0, 0]]]),
     }
-    
+
     # Justification adjustments for padding if needed
     justification_pad_mask = {
         "top": "topleft",
@@ -153,11 +153,11 @@ def pad_stack_np(images, justification="center"):
         "right": "topright",
         "center": "topleft"
     }
-    
+
     # Get the correct padding mask based on justification
     pad_mask = justification_mask[justification]
     mod_mask = justification_mask[justification_pad_mask.get(justification, justification)]
-    
+
     # Calculate the exact padding parameters
     pad_param = (pad_mask * sizes_diff[:,:,None] + mod_mask * sizes_mod[:,:,None]).astype(int)
 
@@ -166,7 +166,7 @@ def pad_stack_np(images, justification="center"):
 
     # We keep the original faces to return as extra info
     original_shapes = np.stack([img.shape for img in images], axis=0)
-    
+
     return images_padded, original_shapes, pad_param
 
 
@@ -188,17 +188,17 @@ def pad_stack_tf(images, justification="center"):
     """
     # Stack the shapes of all images into a tensor
     sizes_stack = tf.stack([tf.shape(img) for img in images], axis=0)
-    
+
     # Find the maximum shape along each dimension
     sizes_max = tf.reduce_max(sizes_stack, axis=0, keepdims=True)
-    
+
     # Calculate the difference in size for padding
     sizes_diff = sizes_max - sizes_stack
-    
+
     # Calculate if any padding size is odd, to adjust padding
     sizes_mod = tf.cast(sizes_diff % 2, tf.float32)
     sizes_diff = tf.cast(sizes_diff, tf.float32) - sizes_mod
-    
+
     # Justification masks for padding alignment
     justification_mask = {
         "top": tf.constant([[[0, 1.], [0.5, 0.5], [0, 0]]]),
@@ -211,7 +211,7 @@ def pad_stack_tf(images, justification="center"):
         "right": tf.constant([[[0.5, 0.5], [1., 0], [0, 0]]]),
         "center": tf.constant([[[0.5, 0.5], [0.5, 0.5], [0, 0]]]),
     }
-    
+
     # Justification adjustments for padding if needed
     justification_pad_mask = {
         "top": "topleft",
@@ -220,7 +220,7 @@ def pad_stack_tf(images, justification="center"):
         "right": "topright",
         "center": "topleft"
     }
-    
+
     # Get the correct padding mask based on justification
     pad_mask = justification_mask[justification]
     mod_mask = justification_mask[justification_pad_mask.get(justification, justification)]
@@ -231,12 +231,12 @@ def pad_stack_tf(images, justification="center"):
 
     # Apply the calculated padding to each image and stack them into a single tensor
     images_padded = tf.stack([tf.pad(img, paddings=pad) for img, pad in zip(images, pad_param)], axis=0)
-    
+
     # We keep the original faces to return as extra info
     original_shapes = tf.stack([tf.shape(img) for img in images], axis=0)
-    
+
     return images_padded, original_shapes, pad_param
-    
+
 
 def ensure_stack(images):
     """
@@ -252,13 +252,14 @@ def ensure_stack(images):
     Returns:
         np.ndarray: A properly stacked array of images, ensuring they have the same shape.
     """
-    
+
     # If images is a list, pad and stack them
     if isinstance(images, list):
         images = pad_stack_np(images)
-    
+
     # Broadcast to ensure the images have a consistent shape (batch dimension)
-    return np.broadcast_to(images, [(len(images.shape) < 4) + (len(images.shape) >= 4) * images.shape[0],] + list(images.shape[len(images.shape) >= 4:]))
+    return np.broadcast_to(images, 
+                           [(len(images.shape) < 4) + (len(images.shape) >= 4) * images.shape[0],] + list(images.shape[len(images.shape) >= 4:]))
 
 
 def load_image(image, dtype=tf.float32, device="CPU:0"):
@@ -276,24 +277,24 @@ def load_image(image, dtype=tf.float32, device="CPU:0"):
         tf.Tensor: The decoded image tensor, with shape (height, width, channels) and dtype `dtype`. If 
                    `normalize=True`, the image values will be scaled to the range [0, 1].
     """
-    
-    with tf.device("/cpu:0"):
+
+    with tf.device(device):
         is_tensor = tf.is_tensor(image) or isinstance(image, np.ndarray)
-    
+
         if is_tensor:
             decoded_image = image
         else:
             try:
-                if type(image) is str:
+                if isinstance(image, str):
                     image_data = tf.io.read_file(image)  # Read image from file
                 else:
                     image_data = image  # Assume image data is provided directly
-            except NotFoundError as e:
+            except NotFoundError:
                 image_data = image  # If file not found, use the input directly
-            
+
             # Decode the image with 3 channels (RGB)
             decoded_image = tf.image.decode_image(image_data, channels=3, dtype=dtype).numpy()
-            
+
         # If dtype is float, adjust the image scale
         if dtype in [tf.float16, tf.float32]:
             decoded_image *= 255  # Convert pixel values to [0, 255] if using float data type
@@ -386,12 +387,12 @@ def extract_patches(images_normalized, bboxes_batch, expected_size=(24, 24)):
     """
     # Get the shape of the input images
     shape = images_normalized.shape
-    
+
     # Normalize the bounding box coordinates to be within [0, 1] relative to image dimensions
     selector = [2, 1, 4, 3]
-        
+
     bboxes_batch_coords = bboxes_batch[:, selector] / np.asarray([[shape[selector[1]], shape[selector[0]], shape[selector[1]], shape[selector[0]]]])
-    
+
     # Extract patches from the images using the bounding boxes, resizing them to `expected_size`
     result = tf.image.crop_and_resize(
         images_normalized,                 # Input image tensor
@@ -399,5 +400,5 @@ def extract_patches(images_normalized, bboxes_batch, expected_size=(24, 24)):
         bboxes_batch[:, 0].astype(int),    # Indices of the images in the batch corresponding to the bounding boxes
         expected_size                      # Size to resize the cropped patches (height, width)
     )
-    
+
     return result

@@ -20,6 +20,3 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from mtcnn.network.pnet import PNet
-from mtcnn.network.rnet import RNet
-from mtcnn.network.onet import ONet

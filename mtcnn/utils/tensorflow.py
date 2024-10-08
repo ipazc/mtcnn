@@ -21,10 +21,9 @@
 # SOFTWARE.
 
 import os
-import sys
-import logging
-import joblib
 import importlib
+
+import joblib
 
 
 def load_weights(weights_name):
@@ -65,17 +64,17 @@ def set_gpu_memory_growth():
     Raises:
         RuntimeError: If the GPUs have already been initialized or if memory growth cannot be set.
     """
-    import tensorflow as tf    
-    
+    import tensorflow as tf
+
     # List available GPUs
     gpus = tf.config.experimental.list_physical_devices('GPU')
-    
+
     if gpus:
         try:
             # Set memory growth for each GPU
             for gpu in gpus:
                 tf.config.experimental.set_memory_growth(gpu, True)
-                
+
         except RuntimeError as e:
             # Error occurs if GPUs have already been initialized
             print(f"Error setting memory growth: {e}")

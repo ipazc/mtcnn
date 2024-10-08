@@ -20,6 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# pylint: disable=duplicate-code
+
+import numpy as np
+
 from mtcnn.network.pnet import PNet
 
 from mtcnn.utils.tensorflow import load_weights
@@ -27,8 +31,6 @@ from mtcnn.utils.images import build_scale_pyramid, apply_scales
 from mtcnn.utils.bboxes import generate_bounding_box, upscale_bboxes, smart_nms_from_bboxes, resize_to_square
 
 from mtcnn.stages.base import StageBase
-
-import numpy as np
 
 
 class StagePNet(StageBase):
@@ -42,7 +44,7 @@ class StagePNet(StageBase):
         stage_id (int): Unique identifier for the stage. Defaults to 1.
         weights (str): Path to the weights file to load the model. Defaults to "pnet.lz4".
     """
-    
+
     def __init__(self, stage_name="Stage PNET", stage_id=1, weights="pnet.lz4"):
         """
         Initializes the StagePNet by loading the PNet model and setting the specified weights.
@@ -55,10 +57,10 @@ class StagePNet(StageBase):
         model = PNet()
         model.build()  # Building the model (no need to specify input shape if default is provided)
         model.set_weights(load_weights(weights))  # Load pre-trained weights
-        
+
         super().__init__(stage_name=stage_name, stage_id=stage_id, model=model)
 
-    def __call__(self, images_normalized, images_oshapes, min_face_size=20, min_size=12, scale_factor=0.709, 
+    def __call__(self, images_normalized, images_oshapes, min_face_size=20, min_size=12, scale_factor=0.709,
                  threshold_pnet=0.6, nms_pnet1=0.5, nms_pnet2=0.7, **kwargs):
         """
         Runs the PNet stage on a batch of images to generate bounding box proposals.
@@ -79,12 +81,11 @@ class StagePNet(StageBase):
             np.ndarray: A numpy array of bounding boxes after NMS and resizing to square, ready for the next stage.
         """
         # 1. Build the pyramid scale for every image based on the size and scale factor
-        scales_groups = [build_scale_pyramid(shape[1], shape[0], min_face_size=min_face_size, scale_factor=scale_factor) 
+        scales_groups = [build_scale_pyramid(shape[1], shape[0], min_face_size=min_face_size, scale_factor=scale_factor)
                          for shape in images_oshapes]
-        
+
         # 2. Apply the scales to normalized images
         scales_result, scales_index = apply_scales(images_normalized, scales_groups)
-        scales_size = scales_index.shape[0]
         batch_size = images_normalized.shape[0]
 
         # 3. Get proposals bounding boxes and confidence from the model (PNet)

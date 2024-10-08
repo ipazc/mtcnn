@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# pylint: disable=duplicate-code
+
 import tensorflow as tf
 
 
@@ -37,7 +39,7 @@ class PNet(tf.keras.Model):
     """
     def __init__(self, **kwargs):
         super(PNet, self).__init__(**kwargs)
-        
+
         # Definir las capas
         self.conv1 = L.Conv2D(10, kernel_size=(3,3), strides=(1,1), padding="valid", activation="linear", name="conv1")
         self.prelu1 = L.PReLU(shared_axes=[1, 2], name="prelu1")
@@ -52,31 +54,31 @@ class PNet(tf.keras.Model):
     def build(self, input_shape=(None, None, None, 3)):
         self.conv1.build(input_shape)
         output_shape = self.conv1.compute_output_shape(input_shape)
-        
+
         self.prelu1.build(output_shape)
         output_shape = self.prelu1.compute_output_shape(output_shape)
-        
+
         self.maxpool1.build(output_shape)
         output_shape = self.maxpool1.compute_output_shape(output_shape)
-        
+
         self.conv2.build(output_shape)
         output_shape = self.conv2.compute_output_shape(output_shape)
-        
+
         self.prelu2.build(output_shape)
         output_shape = self.prelu2.compute_output_shape(output_shape)
-        
+
         self.conv3.build(output_shape)
         output_shape = self.conv3.compute_output_shape(output_shape)
-        
+
         self.prelu3.build(output_shape)
         output_shape = self.prelu3.compute_output_shape(output_shape)
-        
+
         self.conv4_1.build(output_shape)
         self.conv4_2.build(output_shape)
 
         super(PNet, self).build(input_shape)
-        
-    def call(self, inputs):
+
+    def call(self, inputs, *args, **kwargs):
         x = inputs
 
         # First conv block

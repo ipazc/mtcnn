@@ -20,10 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import numpy as np
+
 from .bboxes import parse_bbox
 from .landmarks import parse_landmarks
-
-import numpy as np
 
 
 def plot_bbox(image, bbox, color="#FFFF00", normalize_color=False, input_as_width_height=True):
@@ -43,7 +43,7 @@ def plot_bbox(image, bbox, color="#FFFF00", normalize_color=False, input_as_widt
     """
     color = parse_color(color)  # Convert color to RGB
     color = color if normalize_color else (color * 255).astype(np.uint8)
-    
+
     # Parse the bounding box coordinates
     bbox = parse_bbox(bbox, input_as_width_height=input_as_width_height, output_as_width_height=False)
 
@@ -61,7 +61,7 @@ def plot_bbox(image, bbox, color="#FFFF00", normalize_color=False, input_as_widt
     return result
 
 
-def plot_landmarks(image, landmarks, color="#FFFF00", keypoints="nose,mouth_right,right_eye,left_eye,mouth_left", 
+def plot_landmarks(image, landmarks, color="#FFFF00", keypoints="nose,mouth_right,right_eye,left_eye,mouth_left",
                    brush_size=2, normalize_color=False):
     """
     Plots facial landmarks on the given image.
@@ -85,8 +85,8 @@ def plot_landmarks(image, landmarks, color="#FFFF00", keypoints="nose,mouth_righ
         landmarks = parse_landmarks(landmarks)  # Parse the landmarks
 
     except IndexError:  # No landmarks available
-        return image 
-            
+        return image
+
     image = image.copy()  # Copy the image to avoid modifying the original
 
     # Draw each landmark as a small circle
@@ -100,19 +100,45 @@ def plot_landmarks(image, landmarks, color="#FFFF00", keypoints="nose,mouth_righ
 
 
 def plot(image, detection, input_as_width_height=True):
+    """
+    Plots a single or multiple facial detection results on the given image.
+
+    Args:
+        image (np.ndarray): The input image on which to draw the detections.
+        detection (list, dict, or np.ndarray): A single detection or a list/array of detections to plot. 
+            Each detection contains facial landmarks and/or bounding box information.
+        input_as_width_height (bool): Whether the input bounding box format is (width, height) instead of 
+            the default (x1, y1, x2, y2) (default is True).
+
+    Returns:
+        np.ndarray or None: The image with the detection(s) plotted, or None if no detection is present.
+    """
     if len(detection) == 0:
         return None
 
     if isinstance(detection, list) or (isinstance(detection, np.ndarray) and len(detection.shape) > 1):
         return plot_all(image, detection, input_as_width_height=input_as_width_height)
-        
+
     return plot_landmarks(plot_bbox(image, detection, input_as_width_height=input_as_width_height), detection)
 
 
 def plot_all(image, detections, input_as_width_height=True):
+    """
+    Plots multiple facial detection results on the given image.
+
+    Args:
+        image (np.ndarray): The input image on which to draw the detections.
+        detections (list or np.ndarray): A list or array of detections, where each detection contains 
+            facial landmarks and/or bounding box information.
+        input_as_width_height (bool): Whether the input bounding box format is (width, height) instead of 
+            the default (x1, y1, x2, y2) (default is True).
+
+    Returns:
+        np.ndarray: The image with all detections plotted.
+    """
     for detection in detections:
         image = plot_landmarks(plot_bbox(image, detection, input_as_width_height=input_as_width_height), detection)
-            
+
     return image
 
 
@@ -136,12 +162,12 @@ def parse_color(color):
         if color.startswith("0x"):
             color = color[2:]  # Remove '0x' prefix
         if len(color) == 3:  # Short form hex color (#RGB)
-            color = np.asarray([int(f"{color[0]}{color[0]}", base=16), 
-                                int(f"{color[1]}{color[1]}", base=16), 
+            color = np.asarray([int(f"{color[0]}{color[0]}", base=16),
+                                int(f"{color[1]}{color[1]}", base=16),
                                 int(f"{color[2]}{color[2]}", base=16)]) / 255
         if len(color) == 6:  # Full form hex color (#RRGGBB)
-            color = np.asarray([int(f"{color[0]}{color[1]}", base=16), 
+            color = np.asarray([int(f"{color[0]}{color[1]}", base=16),
                                 int(f"{color[2]}{color[3]}", base=16), 
                                 int(f"{color[4]}{color[5]}", base=16)]) / 255
-    
+
     return color

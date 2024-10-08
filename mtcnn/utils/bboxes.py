@@ -20,10 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from mtcnn.utils.landmarks import parse_landmarks
-
-
 import numpy as np
+
+from mtcnn.utils.landmarks import parse_landmarks
 
 
 def generate_bounding_box(bbox_reg, bbox_class, threshold_face, strides=2, cell_size=12):
@@ -48,29 +47,29 @@ def generate_bounding_box(bbox_reg, bbox_class, threshold_face, strides=2, cell_
     """
     bbox_reg = bbox_reg.numpy()
     bbox_class = bbox_class.numpy()
-    
+
     # Create a mask for detected faces based on the threshold for face probability
     confidence_score = bbox_class[:,:,:,1]
-    
+
     # Find the indices where the detection mask is true (i.e., face detected)
     index_bboxes = np.stack(np.where(confidence_score > threshold_face)) # batch_size, y, x
     filtered_bbox_reg = np.transpose(bbox_reg[index_bboxes[0], index_bboxes[1], index_bboxes[2]], (1,0))
-        
+
     # Extract the regression values
     reg_x1, reg_y1, reg_x2, reg_y2 = filtered_bbox_reg
-    
+
     # Convert strides and cell size into arrays for easy broadcasting
     strides = np.asarray([[1], [strides], [strides]])
     cellsize = [np.asarray([[0], [1], [1]]), np.asarray([[0], [cell_size], [cell_size]])]
 
     # Calculate the top-left and bottom-right corners of the bounding boxes
-    bbox_up_left = index_bboxes * strides + cellsize[0] 
+    bbox_up_left = index_bboxes * strides + cellsize[0]
     bbox_bottom_right = index_bboxes * strides + cellsize[1]
-    
+
     # Calculate width and height for the bounding boxes
     reg_w = bbox_bottom_right[2] - bbox_up_left[2]  # width of bounding box
     reg_h = bbox_bottom_right[1] - bbox_up_left[1]  # height of bounding box
-    
+
     # Apply the regression to adjust the bounding box coordinates
     x1 = bbox_up_left[2] + reg_x1 * reg_w  # Adjusted x1
     y1 = bbox_up_left[1] + reg_y1 * reg_h  # Adjusted y1
@@ -81,12 +80,12 @@ def generate_bounding_box(bbox_reg, bbox_class, threshold_face, strides=2, cell_
     bboxes_result = np.stack([
         index_bboxes[0], x1, y1, x2, y2, confidence_score[index_bboxes[0], index_bboxes[1], index_bboxes[2]]
     ], axis=0).T
-    
+
     # Sort bounding boxes by score in descending order
     bboxes_result = sort_by_scores(bboxes_result, scores=bboxes_result[:, -1], ascending=False)
-                
+
     return bboxes_result
-    
+
 
 def upscale_bboxes(bboxes_result, scales):
     """
@@ -97,19 +96,20 @@ def upscale_bboxes(bboxes_result, scales):
         bboxes_result (np.ndarray): Array of bounding boxes, where each box is represented as 
                                     [batch_index, x1, y1, x2, y2, confidence, reg_x1, reg_y1, reg_x2, reg_y2].
         scales (np.ndarray): Array of scaling factors used during image resizing, typically one scale per image or detection.
-                             The shape of `scales` should be (batch_size,), where each entry corresponds to the scale applied to an image in the batch.
+                             The shape of `scales` should be (batch_size,), where each entry corresponds to the scale applied to an 
+                             image in the batch.
     
     Returns:
         np.ndarray: The input bounding boxes, but with the coordinates scaled back to the original image dimensions, 
                     adjusted for each image in the batch according to its respective scale.
     """
-    
+
     # Broadcast the scales to match the shape of the bounding boxes, ensuring the correct scale is applied to each batch entry
     scales_bcast = np.expand_dims(scales[bboxes_result[:,0].astype(int)], axis=-1)
-    
+
     # Scale the bounding box coordinates (x1, y1, x2, y2) back to the original image size
     bboxes_result[:,1:5] = bboxes_result[:,1:5] / scales_bcast
-    
+
     return bboxes_result
 
 
@@ -129,13 +129,13 @@ def iou(bboxes, method="union"):
         np.ndarray: A matrix of shape (N, N) where each element [i, j] represents the IoU between the i-th and j-th bounding box.
                     The matrix is symmetric, with diagonal elements equal to 1 (IoU of a box with itself).
     """
-    
+
     # Convert the list of bounding boxes to a NumPy array
     bboxes = np.stack(bboxes, axis=0)
-    
+
     # Calculate the area of each bounding box
     area_bboxes = (bboxes[:, 2] - bboxes[:, 0]) * (bboxes[:, 3] - bboxes[:, 1])
-    
+
     # Expand dimensions to compute pairwise IoU (N x N matrix)
     bboxes_a = np.expand_dims(bboxes, axis=0)
     bboxes_b = np.expand_dims(bboxes, axis=1)
@@ -178,13 +178,13 @@ def sort_by_scores(tensor, scores, ascending=True):
     Returns:
         np.ndarray: The tensor sorted according to the scores.
     """
-    
+
     # Get the sorted indices based on the scores
     sorted_indices = np.argsort(scores)
-    
+
     # Sort the tensor using the sorted indices, reversing if descending
     sorted_tensor = tensor[sorted_indices[::(-2 * int(not ascending) + 1)]]
-    
+
     return sorted_tensor
 
 
@@ -200,20 +200,21 @@ def nms(target_iou, threshold):
     Returns:
         np.ndarray: Array of indices of bounding boxes that are kept after NMS.
     """
-    
+
     # Step 1: Create a mask for allowed comparisons (upper triangular part of the IoU matrix, excluding the diagonal)
     allowed_mask = np.triu(np.ones((target_iou.shape[0], target_iou.shape[0])), k=1)
 
     # Step 2: Create a mask for failed comparisons (IoU above the threshold)
     failed_mask = (target_iou > threshold).astype(int)
-    
+
     # Step 3: Combine the masks and get the indices of the remaining boxes
     result_indexes = np.where((failed_mask * allowed_mask).sum(axis=0) == 0)[0]
 
     return result_indexes
 
 
-def smart_nms_from_bboxes(bboxes, threshold, column_image_id=0, columns_bbox=slice(1, 5, None), column_confidence=5, method="union", initial_sort=True):
+def smart_nms_from_bboxes(bboxes, threshold, column_image_id=0, columns_bbox=slice(1, 5, None), column_confidence=5,
+                          method="union", initial_sort=True):
     """
     Applies Non-Maximum Suppression (NMS) to a set of bounding boxes grouped by image ID.
 
@@ -235,20 +236,20 @@ def smart_nms_from_bboxes(bboxes, threshold, column_image_id=0, columns_bbox=sli
     # Step 0: Sort if required
     if initial_sort:
         bboxes = sort_by_scores(bboxes, scores=bboxes[:, column_confidence], ascending=False)
-    
+
     # Step 1: Get unique image IDs
     image_ids = np.unique(bboxes[:, 0])
 
     result = []
-    
+
     # Step 2: Apply NMS per image
     for image_id in image_ids:
         # Filter bounding boxes for the current image
         target_bboxes = bboxes[bboxes[:, column_image_id] == image_id]
-        
+
         # Compute the IoU matrix for the bounding boxes
         target_iou = iou(target_bboxes[:, columns_bbox], method=method)
-        
+
         # Perform NMS and get the indices of the boxes to keep
         target_indexes = nms(target_iou, threshold)
 
@@ -259,7 +260,7 @@ def smart_nms_from_bboxes(bboxes, threshold, column_image_id=0, columns_bbox=sli
         result.append(target_filtered_bboxes)
 
     result = np.concatenate(result, axis=0) if len(result) > 0 else np.empty((0, 6))
-    
+
     return result
 
 
@@ -280,12 +281,12 @@ def resize_to_square(bboxes):
     h = bboxes[:, 4] - bboxes[:, 2]  # Height of each bounding box
     w = bboxes[:, 3] - bboxes[:, 1]  # Width of each bounding box
     largest_size = np.maximum(w, h)  # Largest dimension (width or height)
-    
+
     # Adjust x1 and y1 to center the bounding box and resize to square
     bboxes[:, 1] = bboxes[:, 1] + w * 0.5 - largest_size * 0.5
     bboxes[:, 2] = bboxes[:, 2] + h * 0.5 - largest_size * 0.5
     bboxes[:, 3:5] = bboxes[:, 1:3] + np.tile(largest_size, (2, 1)).T  # Resize x2, y2
-    
+
     return bboxes
 
 
@@ -330,7 +331,7 @@ def adjust_bboxes(bboxes_batch, bboxes_offsets):
 
     sizes = np.stack([w, h, w, h], axis=-1)  # Stack width and height to match bbox_offsets
     bboxes_batch[:, 1:5] += bboxes_offsets * sizes  # Apply offsets to the coordinates
-    
+
     return bboxes_batch
 
 
@@ -391,11 +392,11 @@ def to_json(bboxes_batch, images_count, input_as_width_height=False, output_as_w
 
     if single_element:
         bboxes_batch = np.expand_dims(bboxes_batch, axis=0)
-        
+
     #unique_ids = np.unique(bboxes_batch[:, 0])
 
     result_batch = []
-    
+
     # Loop over each unique image ID
     for unique_id in range(images_count):
         result = []
@@ -405,7 +406,7 @@ def to_json(bboxes_batch, images_count, input_as_width_height=False, output_as_w
         for bbox in bboxes_subset:
             row = {
                 "box": parse_bbox(bbox, 
-                                  output_as_width_height=output_as_width_height, 
+                                  output_as_width_height=output_as_width_height,
                                   input_as_width_height=input_as_width_height).tolist(),
                 "confidence": bbox[5]
             }
@@ -416,14 +417,12 @@ def to_json(bboxes_batch, images_count, input_as_width_height=False, output_as_w
                 row["keypoints"] = parse_landmarks(bbox)
             except IndexError:
                 pass
-        
+
         result_batch.append(result)
 
-    #if is_batch:
-    #    result_batch = result_batch[0]
-    
     return result_batch
-    
+
+
 def limit_bboxes(bboxes_batch, images_shapes, limit_landmarks=True):
     """
     Adjusts bounding boxes so that they fit within the boundaries of their corresponding images.
@@ -455,7 +454,7 @@ def limit_bboxes(bboxes_batch, images_shapes, limit_landmarks=True):
     if limit_landmarks:
         # Adjust x1..x5 of the landmarks to not surpass boundaries
         bboxes_batch_fitted[:, 6:11] = np.minimum(np.maximum(bboxes_batch_fitted[:, 6:11], 0), expected_shapes[:, 1:2] - 1)
-    
+
         # Adjust y1..y5 of the landmarks to not surpass boundaries
         bboxes_batch_fitted[:, 11:16] = np.minimum(np.maximum(bboxes_batch_fitted[:, 11:16], 0), expected_shapes[:, 0:1] - 1)
 
@@ -472,7 +471,8 @@ def parse_bbox(bbox, output_as_width_height=True, input_as_width_height=True):
                                        - list: [x1, y1, x2, y2] or [x1, y1, width, height]
                                        - np.ndarray: Shape (4,) or (5,) where the first value might be an index.
         output_as_width_height (bool): Whether to return the bounding box as [x1, y1, width, height] (default True) or [x1, y1, x2, y2] if False.
-        input_as_width_height (bool): Whether the input format of the bounding box is [x1, y1, width, height] (default True) or [x1, y1, x2, y2] if False. 
+        input_as_width_height (bool): Whether the input format of the bounding box is [x1, y1, width, height] (default True) or 
+                                      [x1, y1, x2, y2] if False.
                                 
     
     Returns:
@@ -481,7 +481,7 @@ def parse_bbox(bbox, output_as_width_height=True, input_as_width_height=True):
     # Extract box if input is a dict
     if isinstance(bbox, dict):
         bbox = bbox['box']
-    
+
     # Parse list format
     if isinstance(bbox, list):
         x1, y1, width, height = bbox
@@ -489,29 +489,29 @@ def parse_bbox(bbox, output_as_width_height=True, input_as_width_height=True):
         if not input_as_width_height:
             width = width - x1
             height = height - y1
-        
+
         x2_or_w = width if output_as_width_height else x1 + width
         y2_or_h = height if output_as_width_height else y1 + height
-        
+
         return np.asarray([x1, y1, x2_or_w, y2_or_h]).round().astype(int)
-    
+
     # Parse ndarray format
     if isinstance(bbox, np.ndarray):
         offset = 1 if bbox.shape[0] > 4 else 0  # Handle optional first element
-        
+
         x1, y1, width, height = bbox[offset:offset+4]
-        
+
         if not input_as_width_height:
             width = width - x1
             height = height - y1
-            
+
         x2_or_w = width if output_as_width_height else x1 + width
         y2_or_h = height if output_as_width_height else y1 + height
-        
+
         return np.asarray([x1, y1, x2_or_w, y2_or_h]).round().astype(int)
-    
+
     raise ValueError("Invalid bbox format. Expected dict, list, or ndarray.")
-    
+
 
 def fix_bboxes_offsets(bboxes_batch, pad_param):
     """
@@ -535,11 +535,11 @@ def fix_bboxes_offsets(bboxes_batch, pad_param):
 
     indexes_bbox_x = [1,3]
     indexes_bbox_y = [2,4]
-    
+
     indexes_landmarks_x = [6, 7, 8, 9, 10]
     indexes_landmarks_y = [11, 12, 13, 14, 15]
-    
-    
+
+
     # Adjust bounding boxes and landmarks for each image based on its padding parameters
     for image_id, pad in zip(images_ids, pad_param):
         selector = bboxes_batch[:, 0] == image_id
@@ -554,12 +554,12 @@ def fix_bboxes_offsets(bboxes_batch, pad_param):
         try:
             # Adjust the x-coordinates of landmarks by subtracting width padding
             bboxes_batch[np.ix_(selector, indexes_landmarks_x)] -= pad[1, 0]
-    
+
             # Adjust the y-coordinates of landmarks by subtracting height padding
             bboxes_batch[np.ix_(selector, indexes_landmarks_y)] -= pad[0, 0]
-            
+
         except IndexError:
             pass
 
-    
+
     return bboxes_batch

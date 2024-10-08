@@ -90,4 +90,3 @@ def parse_landmarks(landmarks):
         }
 
     return landmarks
-

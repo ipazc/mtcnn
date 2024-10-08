@@ -28,19 +28,19 @@ def read_file(file_name):
         return f.read()
 
 setup(
-    name='mtcnn', 
-    version='1.0.0', 
-    description='Multitask Cascaded Convolutional Networks for face detection and alignment (MTCNN) in TensorFlow 2.x',
-    long_description=read_file('README.md'), 
-    long_description_content_type='text/markdown', 
-    author='Iván de Paz Centeno', 
-    author_email='ipazc@unileon.es', 
-    url='https://github.com/ipazc/mtcnn', 
-    license='MIT', 
+    name='mtcnn',
+    version='1.0.0',
+    description='Multitask Cascaded Convolutional Networks for face detection and alignment (MTCNN) in Python >= 3.10 and TensorFlow >= 2.12',
+    long_description=read_file('README.md'),
+    long_description_content_type='text/markdown',
+    author='Iván de Paz Centeno',
+    author_email='ipazc@unileon.es',
+    url='https://github.com/ipazc/mtcnn',
+    license='MIT',
     packages=find_packages(exclude=['tests', 'docs']),
     install_requires=[
-        'joblib>=1.4.2', 
-        'lz4>=4.3.3', 
+        'joblib>=1.4.2',
+        'lz4>=4.3.3',
     ],
     extras_require={
         'tensorflow': [
@@ -59,9 +59,9 @@ setup(
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
     python_requires='>=3.10',

@@ -20,12 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from mtcnn.mtcnn import MTCNN
-from mtcnn.utils.images import load_image, load_images_batch
+# pylint: disable=duplicate-code
+# pylint: disable=redefined-outer-name
 
 import os
 import pytest
 import numpy as np
+
+from mtcnn.mtcnn import MTCNN
 
 
 @pytest.fixture(scope="module")
@@ -72,7 +74,7 @@ def test_detect_faces_from_uri(mtcnn_detector, test_images):
 
     # Check bounding box in 'xywh' format by default
     assert len(first['box']) == 4, "Bounding box should contain 4 coordinates (X1, Y1, width, height)."
-    
+
 def test_detect_faces_from_bytes(mtcnn_detector, test_images):
     """
     Test MTCNN detects faces and landmarks when given an image as bytes.
@@ -138,7 +140,7 @@ def test_detect_faces_output_types_and_formats(mtcnn_detector, test_images, outp
         assert len(result) == 2, "Should return results for two images."
         assert len(result[0]) > 0, "First image should detect at least one face."
         assert len(result[1]) == 0, "Second image should detect no faces."
-        
+
         # Check bounding box format based on box_format
         first_bbox = result[0][0]['box']
         if box_format == "xywh":
@@ -148,13 +150,13 @@ def test_detect_faces_output_types_and_formats(mtcnn_detector, test_images, outp
             assert len(first_bbox) == 4, "Bounding box should contain 4 values for 'xyxy'."
             assert first_bbox[2] > first_bbox[0] and first_bbox[3] > first_bbox[1], \
                 "X2 and Y2 should be greater than X1 and Y1 for 'xyxy' format."
-    
+
     elif output_type == "numpy":
         assert isinstance(result, np.ndarray), "Output should be a numpy array when output_type is 'numpy'."
         assert result.shape[0] == 2, "First dimension of result should correspond to the number of images in the batch."
         assert result[0, 0] == 0, "First index should indicate image 0 for the first bounding box."
         assert result[-1, 0] == 0, "Last index should indicate image 0 for the last bounding box, as the second image is invalid."
-        
+
         # Check bounding box format in numpy based on box_format
         first_bbox = result[0, 1:5]  # Assuming [image_idx, x1, y1, x2_or_width, y2_or_height]
         if box_format == "xywh":
@@ -172,4 +174,3 @@ def test_invalid_image(mtcnn_detector):
     #with pytest.raises(InvalidImage):
     result = mtcnn_detector.detect_faces(invalid_input)
     assert len(result) == 0, "There should not be faces detected in an invalid input"
-

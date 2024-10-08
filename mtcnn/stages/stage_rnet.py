@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# pylint: disable=duplicate-code
+
 from mtcnn.network.rnet import RNet
 
 from mtcnn.utils.tensorflow import load_weights
@@ -39,7 +41,7 @@ class StageRNet(StageBase):
         stage_id (int): Unique identifier for the stage. Defaults to 2.
         weights (str): Path to the weights file to load the model. Defaults to "rnet.lz4".
     """
-    
+
     def __init__(self, stage_name="Stage RNET", stage_id=2, weights="rnet.lz4"):
         """
         Initializes the StageRNet by loading the RNet model and setting the specified weights.

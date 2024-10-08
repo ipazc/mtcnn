@@ -25,4 +25,3 @@ import sys
 
 # Add the project root folder to the PYTHONPATH for relative opening of test resources
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
