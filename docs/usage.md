@@ -50,11 +50,11 @@ The `result` will contain the bounding box and facial landmarks for each detecte
     {
         "box": [277, 90, 48, 63],
         "keypoints": {
-            "nose": (303, 131),
-            "mouth_right": (313, 141),
-            "right_eye": (314, 114),
-            "left_eye": (291, 117),
-            "mouth_left": (296, 143)
+            "nose": [303, 131],
+            "mouth_right": [313, 141],
+            "right_eye": [314, 114],
+            "left_eye": [291, 117],
+            "mouth_left": [296, 143]
         },
         "confidence": 0.9985
     }

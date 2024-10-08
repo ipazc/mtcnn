@@ -5,6 +5,7 @@
 ![Test Status](https://github.com/ipazc/mtcnn/actions/workflows/tests.yml/badge.svg)
 ![Pylint Check](https://github.com/ipazc/mtcnn/actions/workflows/pylint.yml/badge.svg)
 ![PyPI Downloads](https://img.shields.io/pypi/dm/mtcnn)
+![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13901379.svg)
 
 
 ## Overview
@@ -55,11 +56,11 @@ Output example:
     {
         "box": [277, 90, 48, 63],
         "keypoints": {
-            "nose": (303, 131),
-            "mouth_right": (313, 141),
-            "right_eye": (314, 114),
-            "left_eye": (291, 117),
-            "mouth_left": (296, 143)
+            "nose": [303, 131],
+            "mouth_right": [313, 141],
+            "right_eye": [314, 114],
+            "left_eye": [291, 117],
+            "mouth_left": [296, 143]
         },
         "confidence": 0.9985
     }
