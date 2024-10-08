@@ -5,7 +5,8 @@
 ![Test Status](https://github.com/ipazc/mtcnn/actions/workflows/tests.yml/badge.svg)
 ![Pylint Check](https://github.com/ipazc/mtcnn/actions/workflows/pylint.yml/badge.svg)
 ![PyPI Downloads](https://img.shields.io/pypi/dm/mtcnn)
-![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13901379.svg)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13901378.svg)](https://doi.org/10.5281/zenodo.13901378)
+
 
 
 ## Overview
@@ -84,7 +85,22 @@ The full documentation for this project is available at [Read the Docs](http://m
 
 ## Citation
 
-If you use this library for your research or projects, please consider citing the original work:
+If you use this library implementation for your research or projects, please consider using this cite:
+
+```
+@software{ivan_de_paz_centeno_2024_13901378,
+  author       = {Iván de Paz Centeno},
+  title        = {ipazc/mtcnn: v1.0.0},
+  month        = oct,
+  year         = 2024,
+  publisher    = {Zenodo},
+  version      = {v1.0.0},
+  doi          = {10.5281/zenodo.13901378},
+  url          = {https://doi.org/10.5281/zenodo.13901378}
+}
+```
+
+And the original research work from Kaipeng Zhang:
 
 ```
 @article{7553523,
@@ -108,15 +124,24 @@ You may also reference the original GitHub repository that this project was base
 And the FaceNet's implementation that served as inspiration:
 [Facenet's MTCNN implementation](https://github.com/davidsandberg/facenet/tree/master/src/align)
 
-## About this project
 
-The code for this project was created to standardize face detection and provide an easy-to-use framework that helps the research community push the boundaries of AI knowledge. Learn more about the author of this code on [Iván de Paz Centeno's website](https://ipazc.com)
+## About the Author
 
-If you find this project useful, please consider supporting it through GitHub Sponsors.
+This project is developed and maintained by [Iván de Paz Centeno](https://ipazc.com), with the goal of standardizing face detection and providing an easy-to-use framework to help the research community push the boundaries of AI knowledge.
+
+If you find this project useful, please consider supporting it through GitHub Sponsors. Your support will help cover costs related to improving the codebase, adding new features, and providing better documentation.
 
 [![Sponsor](https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-brightgreen)](https://github.com/sponsors/ipazc)
 
-Your support will help cover costs related to improving the codebase, adding new features, and providing better documentation.
+
+## Acknowledgments
+
+This project has evolved over time with contributions from multiple developers. While the current codebase has been completely rewritten, we acknowledge and appreciate the valuable input and collaboration from past contributors.
+
+A special thanks to everyone who has submitted pull requests, reported issues, or provided feedback to make this project better. 
+
+For a full list of contributors, please visit the [GitHub contributors page](https://github.com/ipazc/mtcnn/graphs/contributors).
+
 
 ## License
 
