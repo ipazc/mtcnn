@@ -89,4 +89,3 @@ class StageBase(ABC):
         Raises:
             NotImplementedError: If the method is not implemented in a subclass.
         """
-        pass

@@ -167,7 +167,7 @@ def parse_color(color):
                                 int(f"{color[2]}{color[2]}", base=16)]) / 255
         if len(color) == 6:  # Full form hex color (#RRGGBB)
             color = np.asarray([int(f"{color[0]}{color[1]}", base=16),
-                                int(f"{color[2]}{color[3]}", base=16), 
+                                int(f"{color[2]}{color[3]}", base=16),
                                 int(f"{color[4]}{color[5]}", base=16)]) / 255
 
     return color

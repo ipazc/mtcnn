@@ -258,7 +258,7 @@ def ensure_stack(images):
         images = pad_stack_np(images)
 
     # Broadcast to ensure the images have a consistent shape (batch dimension)
-    return np.broadcast_to(images, 
+    return np.broadcast_to(images,
                            [(len(images.shape) < 4) + (len(images.shape) >= 4) * images.shape[0],] + list(images.shape[len(images.shape) >= 4:]))
 
 

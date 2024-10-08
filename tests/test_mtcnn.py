@@ -47,7 +47,7 @@ def test_images():
     # Cargar los bytes de las imágenes
     with open(valid_image_path, "rb") as f:
         valid_image_bytes = f.read()
-    
+
     with open(no_faces_image_path, "rb") as f:
         no_faces_image_bytes = f.read()
 
@@ -75,6 +75,7 @@ def test_detect_faces_from_uri(mtcnn_detector, test_images):
     # Check bounding box in 'xywh' format by default
     assert len(first['box']) == 4, "Bounding box should contain 4 coordinates (X1, Y1, width, height)."
 
+
 def test_detect_faces_from_bytes(mtcnn_detector, test_images):
     """
     Test MTCNN detects faces and landmarks when given an image as bytes.
@@ -84,6 +85,7 @@ def test_detect_faces_from_bytes(mtcnn_detector, test_images):
     assert isinstance(result, list), "Output should be a list of bounding boxes."
     assert len(result) > 0, "Should detect at least one face in the image."
 
+
 def test_detect_no_faces(mtcnn_detector, test_images):
     """
     Test that MTCNN returns an empty list when no faces are detected in a valid image.
@@ -91,6 +93,7 @@ def test_detect_no_faces(mtcnn_detector, test_images):
     result = mtcnn_detector.detect_faces(test_images['no_faces_image'])
     assert isinstance(result, list), "Output should be a list."
     assert len(result) == 0, "Should detect no faces in the image."
+
 
 def test_detect_faces_batch_from_uri(mtcnn_detector, test_images):
     """
@@ -104,6 +107,7 @@ def test_detect_faces_batch_from_uri(mtcnn_detector, test_images):
     assert len(result[0]) > 0, "First image should detect a face."
     assert isinstance(result[1], list), "Second result should be a list of bounding boxes."
     assert len(result[1]) == 0, "Second image should detect no faces."
+
 
 def test_detect_faces_batch_from_bytes(mtcnn_detector, test_images):
     """
