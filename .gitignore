@@ -1,19 +1,13 @@
+# Ignore the /debug folder and all its contents
+/debug/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 
-# C extensions
-*.so
-
-# Customized
-test.zip
-benchmark/
-debug.py
-
 # Distribution / packaging
 .Python
-env/
 build/
 develop-eggs/
 dist/
@@ -25,14 +19,14 @@ lib64/
 parts/
 sdist/
 var/
-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
 # PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+# Usually these files are written by a python script from a template
+# before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
 
@@ -43,66 +37,81 @@ pip-delete-this-directory.txt
 # Unit test / coverage reports
 htmlcov/
 .tox/
+.nox/
 .coverage
 .coverage.*
 .cache
 nosetests.xml
 coverage.xml
 *.cover
+*.py,cover
 .hypothesis/
+.pytest_cache/
+coverage/
 
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
-
-# Jupyter Notebook
+# Jupyter Notebook checkpoints
 .ipynb_checkpoints
 
-# pyenv
-.python-version
+# Jupyter Notebook temporary files
+*.~nb
 
-# celery beat schedule file
-celerybeat-schedule
+# VS Code settings
+.vscode/
+*.code-workspace
 
-# SageMath parsed files
-*.sage.py
-
-# dotenv
-.env
+# PyCharm project files
 .idea/
-.idea
-
-# virtualenv
-.venv
-venv/
-ENV/
+*.iml
+*.iws
+*.ipr
 
 # Spyder project settings
 .spyderproject
 .spyproject
 
-# Rope project settings
-.ropeproject
+# Eclipse project files
+.metadata/
+*.pydevproject
+.project
+*.pycproject
 
-# mkdocs documentation
-/site
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+env.bak/
+venv.bak/
 
-# mypy
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Anaconda environments
+.conda/
+*.condarc
+*.conda
+*.env
+*.envs
+.env
+.envs
+
+# Environments variable definitions
+.env
+.env.local
+.venv
+
+# IPython history
+.history
+
+# MyPy cache
 .mypy_cache/
+
+# Pyre type checker
+.pyre/
+

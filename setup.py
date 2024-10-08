@@ -1,9 +1,6 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-# MIT License
+# MIT LICENSE
 #
-# Copyright (c) 2019 Iván de Paz Centeno
+# Copyright (c) 2019-2024 Iván de Paz Centeno
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,49 +20,58 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import sys
-from setuptools import setup, setuptools
+from setuptools import setup, find_packages
 
 
-__author__ = "Iván de Paz Centeno"
-__version__= "0.1.1"
-
-
-def readme():
-    with open('README.rst', encoding="UTF-8") as f:
+def read_file(file_name):
+    with open(file_name, encoding='utf-8') as f:
         return f.read()
 
-
-if sys.version_info < (3, 4, 1):
-    sys.exit('Python < 3.4.1 is not supported!')
-
-
-setup(name='mtcnn',
-      version=__version__,
-      description='Multi-task Cascaded Convolutional Neural Networks for Face Detection, based on TensorFlow',
-      long_description=readme(),
-      url='http://github.com/ipazc/mtcnn',
-      author='Iván de Paz Centeno',
-      author_email='ipazc@unileon.es',
-      license='MIT',
-      packages=setuptools.find_packages(exclude=["tests.*", "tests"]),
-      install_requires=[
-          "keras>=2.0.0",
-          "opencv-python>=4.1.0"
-      ],
-      classifiers=[
-          'Environment :: Console',
-          'Intended Audience :: Developers',
-          'Intended Audience :: Education',
-          'Intended Audience :: Science/Research',
-          'Natural Language :: English',
-          'Programming Language :: Python :: 3.4',
-          'Programming Language :: Python :: 3.5',
-          'Programming Language :: Python :: 3.6',
-          'Programming Language :: Python :: 3.7',
-      ],
-      test_suite='nose.collector',
-      tests_require=['nose'],
-      include_package_data=True,
-      keywords="mtcnn face detection tensorflow pip package",
-      zip_safe=False)
+setup(
+    name='mtcnn',
+    version='1.0.0',
+    description='Multitask Cascaded Convolutional Networks for face detection and alignment (MTCNN) in Python >= 3.10 and TensorFlow >= 2.12',
+    long_description=read_file('README.md'),
+    long_description_content_type='text/markdown',
+    author='Iván de Paz Centeno',
+    author_email='ipazc@unileon.es',
+    url='https://github.com/ipazc/mtcnn',
+    license='MIT',
+    packages=find_packages(exclude=['tests', 'docs']),
+    install_requires=[
+        'joblib>=1.4.2',
+        'lz4>=4.3.3',
+    ],
+    extras_require={
+        'tensorflow': [
+            'tensorflow>=2.12.0'
+        ],
+        'dev': [
+            'pytest>=8.3.3',
+            'pytest-cov>=5.0.0',
+            'mkdocs>=1.6.1',
+            'mkdocs-material>=9.5.39',
+            'mkdocs-jupyter>=0.25.0'
+        ]
+    },
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
+        'Topic :: Scientific/Engineering :: Artificial Intelligence',
+    ],
+    python_requires='>=3.10',
+    include_package_data=True,
+    package_data={
+        'mtcnn': ['assets/weights/*.lz4'],
+    },
+    project_urls={
+        'Documentation': 'https://github.com/ipazc/mtcnn/docs',
+        'Source': 'https://github.com/ipazc/mtcnn',
+        'Tracker': 'https://github.com/ipazc/mtcnn/issues',
+    },
+)
